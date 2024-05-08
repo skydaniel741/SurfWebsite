@@ -17,9 +17,13 @@ def login():
   return render_template("login.html")
 
 
-@app.route('/surboards')
-def surfboard():
-  return render_template("surfboards.html")
+@app.route('/surfboard/<int:id>')
+def surfboard(id):
+  conn = sqlite3.connect("SurfBoards.db")
+  cur = conn.cursor()
+  cur.execute("SELECT * FROM SurfBoards WHERE surfboard_id =?",(id,))
+  surfboard = cur.fetchone()
+  return render_template("surfboards.html",surfboard=surfboard)
 
 @app.route('/brands')
 def brands():
@@ -29,11 +33,6 @@ def brands():
 @app.route('/checkout')
 def checkout():
   return render_template("checkout.html")
-
-
-
-
-
 
 
 if __name__ == "__main__":

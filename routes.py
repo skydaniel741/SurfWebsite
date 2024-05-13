@@ -1,18 +1,18 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, url_for, request 
 import sqlite3
 
 app = Flask(__name__)
 
 
 @app.route('/')
-def home():
+def layout():
   return render_template("layout.html")
 
 @app.route('/signup')
 def signup():
   return render_template("signup.html")
 
-@app.route('/login')
+@app.route('/login' ,methods=['GET', 'POST'])
 def login():
   return render_template("login.html")
 
@@ -33,6 +33,10 @@ def brands():
 @app.route('/checkout')
 def checkout():
   return render_template("checkout.html")
+
+@app.route('/home')
+def home():
+  return render_template("home.html")
 
 
 if __name__ == "__main__":

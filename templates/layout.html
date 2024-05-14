@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="/static/index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
 </head>
 <body>
  
@@ -16,13 +19,25 @@
           <li><a href="/brands">Brands</a></li>
         </ul>
       </nav>
-      <a href="/checkout"><button>checkout</button></a>
+      <a href="/checkout"><button class="button-checkout">Checkout</button></a>
     </header>
    
     <main>
     {%block content%} {%endblock%} 
     </main>
     <footer>
+      <div class="footer-cont">
+        <div class="footer-nav">
+          <ul class="footer-links">
+            <li><a href="/home">Home</a></li>
+            <li><a href="/surfboard">Products</a></li>
+            <li><a href="/brands">Brands</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2023 Made By Daniel Streletsky</p>
+    </div>
         
     </footer>
     

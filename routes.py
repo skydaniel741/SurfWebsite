@@ -1,7 +1,30 @@
-from flask import Flask, render_template, redirect, url_for, request 
+from flask import Flask, render_template, redirect, url_for, request, session
 import sqlite3
 
 app = Flask(__name__)
+app.secret_key = 'secretkey'
+
+@app.route('/login',methods=['GET', 'POST'])
+def login():
+  # finds the user in the database
+  if request.method == 'POST':
+    username = request.form ['username']
+    password = request.form['password']
+    conn = sqlite3.connect("SurfBoards.db")
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM Users WHERE username = ? and password = ?", (username, password))
+    user = cur.fetchone()
+    #if user is in session
+    if user:
+        session['loggedin'] = True
+        session['user_id'] = user[0]
+        session['username'] = user[1]
+        return redirect(url_for('home'))
+    else:
+        message = print("Invalid username or password")
+        return render_template("login.html", message = message)
+  return render_template ("login.html")
+
 
 
 @app.route('/')
@@ -12,9 +35,6 @@ def layout():
 def signup():
   return render_template("signup.html")
 
-@app.route('/login' ,methods=['GET', 'POST'])
-def login():
-  return render_template("login.html")
 
 
 @app.route('/surfboard/<int:id>')

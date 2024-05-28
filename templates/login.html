@@ -1,15 +1,31 @@
-<div class="login">
-    <h1>Login</h1>
-    <div class="links">
-        <a href="{{ url_for('signup') }}" class="active">Signup</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="index.js">
+    <link rel="stylesheet" href="/static/login-page.css">
+</head>
+<body class="body-login">
+    <div class="login">
+        <h1>Login</h1>
+        <div class="link">
+            <a href="{{ url_for('signup') }}" class="active">Signup</a>
+        </div>
+        <form action="{{ url_for('login') }}" class="login-content" method="post">
+            <div class="users-link">
+            <label for="username">
+            </label>
+            <input type="text" name="username" placeholder="Username" id="username" required>
+            <label for="password" class="password-login">
+            </label>
+            <input type="text" name="password" placeholder="Password" id="password" required>
+            <input type="submit" value="Login">
+        </div>
+        </form>
     </div>
-    <form action="{{ url_for('login') }}" method="post">
-        <label for="username">
-        </label>
-        <input type="text" name="username" placeholder="Username" id="username" required>
-        <label for="password">
-        </label>
-        <input type="text" name="password" placeholder="Password" id="password" required>
-        <input type="submit" value="Login">
-    </form>
-</div>
+</body>
+</html>
+
+

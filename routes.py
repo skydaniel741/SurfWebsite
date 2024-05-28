@@ -21,9 +21,33 @@ def login():
         session['username'] = user[1]
         return redirect(url_for('home'))
     else:
-        message = print("Invalid username or password")
-        return render_template("login.html", message = message)
+        msg ='Invalid username or password'
+        return render_template("login.html", message = msg)
   return render_template ("login.html")
+
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        conn = sqlite3.connect("SurfBoards.db")
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM Users WHERE username = ?", (username,))
+        user = cur.fetchone()
+        if user:
+            msg = "Invalid user"
+        else:
+            cur.execute("INSERT INTO Users (username,password) VALUES (?, ?)", (username, password))
+            conn.commit()  
+            msg = "Account created successfully"    
+            conn.close()
+        return render_template("signup.html", message=msg)
+    
+    return render_template("signup.html")
+
+
+
 
 
 
@@ -31,9 +55,6 @@ def login():
 def layout():
   return render_template("layout.html")
 
-@app.route('/signup')
-def signup():
-  return render_template("signup.html")
 
 
 

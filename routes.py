@@ -6,7 +6,7 @@ app.secret_key = 'secretkey'
 
 @app.route('/login',methods=['GET', 'POST'])
 def login():
-  # finds the user in the database
+  msg = ''  
   if request.method == 'POST':
     username = request.form ['username']
     password = request.form['password']
@@ -21,9 +21,8 @@ def login():
         session['username'] = user[1]
         return redirect(url_for('home'))
     else:
-        msg ='Invalid username or password'
-        return render_template("login.html", message = msg)
-  return render_template ("login.html")
+        msg = 'Invalid username or password'
+  return render_template("login.html", message=msg)
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -43,19 +42,11 @@ def signup():
             msg = "Account created successfully"    
             conn.close()
         return render_template("signup.html", message=msg)
-    
     return render_template("signup.html")
-
-
-
-
-
 
 @app.route('/')
 def layout():
   return render_template("layout.html")
-
-
 
 
 @app.route('/surfboard/<int:id>')

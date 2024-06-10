@@ -1,5 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, request, session
 import sqlite3
+import re
 
 app = Flask(__name__)
 app.secret_key = 'secretkey'
@@ -24,9 +25,14 @@ def login():
         msg = 'Invalid username or password'
   return render_template("login.html", message=msg)
 
+@app.route("/logout")
+def logout():
+   session.clear()
+   return redirect(url_for("home"))
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    msg = ''
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -35,14 +41,18 @@ def signup():
         cur.execute("SELECT * FROM Users WHERE username = ?", (username,))
         user = cur.fetchone()
         if user:
-            msg = "Invalid user"
+            msg = 'Username already exists!'
+        elif not re.match(r'[A-Za-z0-9]+', username):
+            msg = 'Username must contain only characters and numbers!'
+        elif not username or not password:
+            msg = 'Please fill out the form!'
         else:
             cur.execute("INSERT INTO Users (username,password) VALUES (?, ?)", (username, password))
-            conn.commit()  
-            msg = "Account created successfully"    
-            conn.close()
-        return render_template("signup.html", message=msg)
-    return render_template("signup.html")
+            conn.commit()
+            msg = "Account created successfully"
+        conn.close()
+    return render_template("signup.html", message=msg)
+
 
 @app.route('/')
 def layout():

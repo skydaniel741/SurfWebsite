@@ -4,24 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signup</title>
-    <link rel="stylesheet" href="login-page.css">
+    <link rel="stylesheet" href="/static/login-page.css">
 
 </head>
-<body>
-<div class="signup">
+<body class="body-signup">
+    <div class="signup">
         <h1>Signup</h1>
-        <a href="{{ url_for('login') }}" class="active">Login</a>
-    
-    <form action="{{ url_for('signup') }}" method="post">
-    <label for="username">
-    </label>
-    <input type="text"  placeholder="Username" name="username" id="username" required>
-    
-    <label for="password">
-    </label>
-    <input type="text" placeholder="Password" name="password" id="password" required>
-    <input type="submit" value="Signup">
-    </form>
-</div>
+        <form action="{{ url_for('signup') }}" method="post" class="signup-content">
+        <div class="signup-links">
+            <label for="username">
+            </label>
+            <input type="text"  placeholder="Username" name="username" id="username" required class="spacing">
+            <label for="password">
+            </label>
+            <input type="text" placeholder="Password" name="password" id="password" required class="spacing">
+            <input type="submit" value="Signup" class="login-button">
+        </div>
+        </form>
+        <div id="error" style="color: red; font-weight: bold;" >
+            {{ message }}
+        </div>
+        <div>
+            <h2 class="login-link"> Already Have Account?<a href="{{ url_for('login') }}" class="signup-link">LOGIN</a></h2>
+        </div>
+    </div>
 </body>
 </html>

@@ -22,8 +22,7 @@
     border-radius: 20px;
     backdrop-filter: blur(9px);
     color: #fffffa;
-    margin: 0px;
-
+    margin: 5%;
 }
 
 
@@ -102,3 +101,49 @@ input{
     transition: all 0.6s ease 0s;
 }
 
+.body-signup{
+    background-image: url('/static/pictures/pexels-yaroslav-shuraev-1553959\ \(1\).jpg');
+   background-repeat: no-repeat;
+   background-size: cover;
+    margin: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.signup{
+    text-align: center;
+    position: relative;
+    width: 350px;
+    height: 400px;
+    background: transparent;
+    border: 4px solid;
+    border-radius: 20px;
+    backdrop-filter: blur(9px);
+    color: #0d5c63;
+    margin-top:5%;
+}
+
+
+.signup-content{
+    display: grid;
+    justify-content: center;
+    padding: 30px;
+}
+
+.signup-links{
+    text-decoration: none; 
+    font-size: 14px; 
+    font-family: Fjalla One;
+    color: #fffffa;
+    margin-left: 8px;
+    transition: all 0.6s ease 0s;
+}
+
+
+.login-link{
+    text-decoration: none; 
+    font-size: 14px; 
+    font-family: Fjalla One;
+    color: black;
+}

@@ -36,22 +36,29 @@ def signup():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        conn = sqlite3.connect("SurfBoards.db")
-        cur = conn.cursor()
-        cur.execute("SELECT * FROM Users WHERE username = ?", (username,))
-        user = cur.fetchone()
-        if user:
-            msg = 'Username already exists!'
-        elif not re.match(r'[A-Za-z0-9]+', username):
-            msg = 'Username must contain only characters and numbers!'
-        elif not username or not password:
-            msg = 'Please fill out the form!'
+        
+        # Validate username (only letters)
+        if not re.match(r'^[A-Za-z]+$', username):
+            msg = 'Invalid Signup Try Again'
+        # Validate password (only numbers)
+        elif not re.match(r'^[0-9]+$', password):
+            msg = 'Invalid Signup Try Again'
+        # Ensure both fields are filled
         else:
-            cur.execute("INSERT INTO Users (username,password) VALUES (?, ?)", (username, password))
-            conn.commit()
-            msg = "Account created successfully"
-        conn.close()
+            conn = sqlite3.connect("SurfBoards.db")
+            cur = conn.cursor()
+            cur.execute("SELECT * FROM Users WHERE username = ?", (username,))
+            user = cur.fetchone()
+            if user:
+                msg = 'Account Created'
+            else:
+                cur.execute("INSERT INTO Users (username, password) VALUES (?, ?)", (username, password))
+                conn.commit()
+                conn.close()
+                return redirect(url_for('login'))  # Redirect to login page after successful sign-up
+            conn.close()
     return render_template("signup.html", message=msg)
+
 
 
 @app.route('/')
@@ -79,6 +86,10 @@ def checkout():
 @app.route('/home')
 def home():
   return render_template("home.html")
+
+@app.route('/lobby')
+def lobby():
+  return render_template("lobby.html")
 
 
 if __name__ == "__main__":

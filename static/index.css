@@ -105,3 +105,11 @@ transition: all 0.4s ease 0s;
     margin-top: 10px;
 }
 
+#preloader{
+    background: white url(/static/pictures/preloader.gif) no-repeat center center;
+    background-size: 15%;
+    height: 100vh;
+    width: 100%;
+    position: fixed;
+    z-index: 100;
+}

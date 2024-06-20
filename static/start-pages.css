@@ -147,3 +147,42 @@ input{
     font-family: Fjalla One;
     color: black;
 }
+
+.body-lobby{
+    background-image: url('/static/pictures/enter-screen.jpg');
+    background-size: cover;
+    background-color: #fafcfb;
+    height: 550px;
+    background-position: center; 
+    background-repeat: no-repeat; 
+    background-size: cover; 
+}
+
+.centerd{
+    font-size: 8rem;
+    color: #0d5c63;
+    margin: 0;
+    font-family: anton;
+    font-weight: normal;
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.redirect-footer{
+    width: 100%;
+    position: fixed;
+    text-align: center;
+    text-decoration: none;
+}
+
+
+.redirect-links li a{
+    text-decoration: none; 
+    font-size: 18px; 
+    font-family: Fjalla One;
+    padding: 0;
+    list-style: none;
+}
+

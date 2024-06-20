@@ -3,11 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>lobby</title>
+    <title>Lobby</title>
+    <link rel="stylesheet" href="/static/start-pages.css">
+    <link rel="stylesheet" href="/index.js">
 
 </head>
-<body>
-    <h1></h1>
-    
+<body class="body-lobby">
+    <div class="bg"></div>
+    <h1 id="date-time" class="centerd">12:15</h1>
+    <div class="redirect-footer">
+        <ul class="redirect-links">
+          <li><a href="/login">Login</a></li>
+          <li><a href="/signup">Sign</a></li>
+        </ul>
+    </div>
 </body>
+
+<script>
+setInterval(setTime, 1000);
+    setTime();
+    function setTime(){
+        var dt = new Date();
+        time = dt.toLocaleTimeString([], { hour:'2-digit',minute: '2-digit' });
+        document.getElementById('date-time').innerHTML = time;
+    }
+</script>
 </html>

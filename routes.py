@@ -41,7 +41,7 @@ def signup():
         if not re.match(r'^[A-Za-z]+$', username):
             msg = 'Invalid Signup Try Again'
         # Validate password (only numbers)
-        elif not re.match(r'^[0-9]+$', password):
+        elif not re.match(r'^[A-Za-z 0-9]+$', password):
             msg = 'Invalid Signup Try Again'
         # Ensure both fields are filled
         else:
@@ -58,6 +58,9 @@ def signup():
                 return redirect(url_for('login'))  # Redirect to login page after successful sign-up
             conn.close()
     return render_template("signup.html", message=msg)
+
+
+
 
 
 

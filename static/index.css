@@ -49,67 +49,86 @@ header{
     color: black;
 }
 
-.button-checkout{
-    border: none;
-    border-radius: 20px;
-    padding: 5px;
-    box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.2); 
-    color: black;
-    transition: all 0.4s ease 0s;
-    padding-left: 10px;
-    padding-right: 10px;
+.icon-cart{
+width: 50px;
 }
 
-.button-checkout:hover{
-cursor: pointer;
-transform: scale(0.91);
-transition: all 0.4s ease 0s;
-}
-
-
-.footer-cont{
-    background-color: #0d5c63;
-    padding: 15px;
-    margin-top: auto;
-    width: 100%;
-    position: fixed;
-    bottom: 0;
-    display: grid;
-    justify-content:center ;
+header .icon-cart span{
+    width: 30px;
+    display: inline;
+    background-color: red;
+    display: flex;
+    justify-content: center;
     align-items: center;
+    color: black;
+    border-radius: 50px;
+    position: absolute;
 }
 
+.footer-cont {
+    background-color: #44a1a0;
+    padding: 20px;
+    flex-shrink: 0;
+}
 
-.footer-links{
+.footer-nav {
+    text-align: center;
+}
+
+.footer-links {
     list-style: none;
     display: flex;
+    justify-content: center;
     padding: 0;
 }
 
-
+.footer-links li {
+    margin: 0 15px;
+}
 
 .footer-links li a {
-    
-    text-decoration: none; 
-    font-size: 18px; 
-    font-family: Fjalla One;
+    text-decoration: none;
+    font-size: 18px;
+    font-family: 'Fjalla One', sans-serif;
     padding: 20px;
 }
 
-
 .footer-bottom {
-    height: 100%;
-    padding: 0;
-    justify-content: center;
-    display: grid;
+    text-align: center;
     margin-top: 10px;
 }
 
-#preloader{
-    background: white url(/static/pictures/preloader.gif) no-repeat center center;
-    background-size: 15%;
-    height: 100vh;
-    width: 100%;
-    position: fixed;
-    z-index: 100;
+.item{
+    text-align: center;
+}
+.product-list .item img{
+ height: 300px;
+ width: 300px;
+}
+
+.product-list{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.product-list .item{
+    background-color:  #f8f6d1;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+
+.add-cart{
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    background-color: #44a1a0;
+    color: black;
+    padding: 4px;
+    margin: 7px;
+}
+
+.price{
+    letter-spacing: 4px;
 }

@@ -1,12 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop</title>
-</head>
-<body>
-
-    
-</body>
-</html>
+{% extends 'layout.html' %}
+{% block content %}
+<div class="product-list">
+    {% for surfboard in surfboards %}
+    <div class="item">
+        {% if surfboard[5] %}
+        <img src="{{ surfboard[5] }}"  class="item-picture" alt="">
+        {% endif %}
+        <h2>{{ surfboard[1] }}</h2>
+        <div class="price">${{ surfboard[4] }}</div>
+        <h3>{{ surfboard[3] }}</h3>
+        <form action="{{ url_for('add_to_cart') }}" method="post">
+            <input type="hidden" name="surfboard_id" value="{{ surfboard[0] }}">
+            <input type="hidden" name="surfboard_name" value="{{ surfboard[1] }}">
+            <input type="hidden" name="purchase_price" value="{{ surfboard[2] }}">
+            <input type="hidden" name="surfboard_condtion" value="{{ surfboard[3] }}">
+            <button type="submit" class="add-cart">Add to Cart</button>
+        </form>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

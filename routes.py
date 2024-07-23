@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, url_for, request, session
 import sqlite3
 import re
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = 'secretkey'
@@ -20,11 +21,11 @@ def login():
             session['loggedin'] = True
             session['user_id'] = user[0]
             session['username'] = user[1]
+            session['cart'] = []  # Initialize cart in session
             return redirect(url_for('home'))
         else:
             msg = 'Invalid username or password'
     return render_template("login.html", message=msg)
-
 
 @app.route("/logout")
 def logout():
@@ -62,24 +63,24 @@ def layout():
     return render_template("lobby.html")
 
 
-@app.route('/surfboard/<int:id>')
-def surfboard(id):
+@app.route('/surfboard')
+def surfboards():
     conn = sqlite3.connect("SurfBoards.db")
     cur = conn.cursor()
-    cur.execute("SELECT * FROM SurfBoards WHERE surfboard_id = ?", (id,))
-    surfboard = cur.fetchone()
+    cur.execute("SELECT *  FROM SurfBoards")
+    surfboards = cur.fetchall()
     conn.close()
-    return render_template("surfboards.html", surfboard=surfboard)
+    return render_template("surfboards.html", surfboards=surfboards)
 
 
-@app.route('/brands')
-def brands():
-    return render_template("brands.html")
+@app.route('/add_to_cart', methods=['POST'])
+def add_to_cart():
+ 
+    return "Bad Request: Missing form field", 400
 
-
-@app.route('/checkout')
+@app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
-    return render_template("checkout.html")
+    return redirect(url_for('login'))
 
 
 @app.route('/home')
@@ -90,11 +91,6 @@ def home():
 @app.route('/lobby')
 def lobby():
     return render_template("lobby.html")
-
-
-@app.route(404)
-def error():
-    return render_template('404.html')
 
 
 if __name__ == "__main__":

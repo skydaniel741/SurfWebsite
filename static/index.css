@@ -101,23 +101,23 @@ header .icon-cart span{
 .item{
     text-align: center;
 }
-.product-list .item img{
- height: 300px;
- width: 300px;
+.product-list .item img {
+    height: 250px; 
+    width: 200px;  
 }
 
-.product-list{
+.product-list {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
 }
 
-.product-list .item{
-    background-color:  #f8f6d1;
-    padding: 20px;
-    border-radius: 20px;
+.product-list .item {
+    background-color: #fbfbfb;
+    padding: 10px; 
+    border-radius: 10px; 
+    border: 2px solid black; 
 }
-
 
 .add-cart{
     border-radius: 10px;
@@ -125,8 +125,19 @@ header .icon-cart span{
     cursor: pointer;
     background-color: #44a1a0;
     color: black;
-    padding: 4px;
+    padding: 10px;
     margin: 7px;
+    padding-left: 20px;
+    padding-right: 20px;
+    transition: all 0.6s ease 0s;
+}
+
+
+.add-cart:hover{
+    color: white;
+    transition: all 0.6s ease 0s;
+    transform: scaleY(0.85);
+    background-color: black;
 }
 
 .price{

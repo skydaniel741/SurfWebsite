@@ -1,5 +1,6 @@
 {% extends 'layout.html' %}
 {% block content %}
+<h1 class="top-screen">SURFBOARDS</h1>
 <div class="product-list">
     {% for surfboard in surfboards %}
     <div class="item">
@@ -9,6 +10,7 @@
         <h2>{{ surfboard[1] }}</h2>
         <div class="price">${{ surfboard[4] }}</div>
         <h3>{{ surfboard[3] }}</h3>
+        <h4>{{ surfboard[2] }}</h4>
         <form action="{{ url_for('add_to_cart') }}" method="post">
             <input type="hidden" name="surfboard_id" value="{{ surfboard[0] }}">
             <input type="hidden" name="surfboard_name" value="{{ surfboard[1] }}">

@@ -4,48 +4,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
-    <link rel="stylesheet" href="/static/index.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="stylesheet" href="/index.js">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/index.css"> 
+    <link rel="preconnect" href="https://fonts.googleapis.com"> 
+    <link rel="stylesheet" href="/index.js"> 
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet"> 
 </head>
 <body>
-    <header>
-      <img src="/static/pictures/surflogo.png" class="logo">
-      <nav>
-        <ul class="nav-links">
-          <li><a href="/surfboard">Shops</a></li>
-          <li><a href="/brands">Brands</a></li>
-          <li><a href="/lobby">Logout</a></li>
+  <header>
+    <!-- Logo linking to the home page -->
+    <a href="/home"><img src="/static/pictures/surflogo.png" class="logo"></a>
+    
+    <nav>
+        <ul class="nav-links"> <!-- Navigation links -->
+            <li><a href="/surfboard">Shops</a></li>
+            <li><a href="/brands">Brands</a></li>
+            <li><a href="/lobby">Logout</a></li>
         </ul>
-      </nav>
-      <div class="icon-cart">
+    </nav>
+    <!-- Cart icon -->
+    <div class="icon-cart">
         <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" viewBox="0 0 24 24">
-          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312"/>
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312"/>
         </svg>
         <span>0</span>
-      </div>
-    </header>
-   
+    </div>
+</header>
+    
     <main>
-</div>
-
-    {%block content%} {%endblock%} 
+        
+        {%block content%} {%endblock%} 
     </main>
+    
     <footer>
-      <div class="footer-cont">
-        <div class="footer-nav">
-          <ul class="footer-links">
-            <li><a href="/home">Home</a></li>
-            <li><a href="/surfboard">Products</a></li>
-            <li><a href="/brands">Brands</a></li>
-          </ul>
+        <div class="footer-cont">
+            <div class="footer-nav">
+                <ul class="footer-links"> <!-- Footer navigation links -->
+                    <li><a href="/home">Home</a></li>
+                    <li><a href="/surfboard">Products</a></li>
+                    <li><a href="/brands">Brands</a></li>
+                </ul>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Made By Daniel Streletsky</p> <!-- Footer copyright -->
+            </div>
         </div>
-        <div class="footer-bottom">
-          <p>&copy; 2024 Made By Daniel Streletsky</p>
-      </div>
-      </div>
     </footer>
     
 </body>

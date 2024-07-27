@@ -21,6 +21,7 @@ li, a, button{
    color: rgb(255, 253, 253);
    text-decoration: none;
    font-size: 30px;
+  
 }
 
 header{
@@ -28,7 +29,7 @@ header{
     justify-content: space-between;
     align-items: center;
     background-color: #44a1a0;
-    padding: 10px;
+    padding: 5px;
     height: 100px;
 }
 
@@ -37,6 +38,7 @@ header{
     height: 100%;
     display: flex;
     transition: all 0.6s ease 0s;
+
 }
 
 .nav-links, li{
@@ -117,7 +119,7 @@ header .icon-cart span{
     padding: 10px; 
     border-radius: 10px; 
     border: 2px solid black; 
-}
+    margin: 25px;}
 
 .add-cart{
     border-radius: 10px;
@@ -136,10 +138,20 @@ header .icon-cart span{
 .add-cart:hover{
     color: white;
     transition: all 0.6s ease 0s;
-    transform: scaleY(0.85);
+    transform: scaleY(0.9);
     background-color: black;
 }
 
 .price{
     letter-spacing: 4px;
+}
+
+.top-screen{
+    text-align: center;
+    background-color: #ececec;
+    padding: 10px 3px 15px;
+    font-family: anton;
+    letter-spacing: 4px;
+    
+
 }

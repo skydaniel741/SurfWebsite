@@ -225,3 +225,8 @@ body.showcart .cart-tab {
     border-radius: 50%;
     cursor: pointer;
 }
+
+
+.icon-cart{
+    cursor: pointer;
+}

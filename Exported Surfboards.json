@@ -1,0 +1,187 @@
+{
+    "type": "database",
+    "name": "SurfBoards",
+    "objects": [
+        {
+            "type": "table",
+            "database": null,
+            "name": "SurfBoards",
+            "withoutRowId": false,
+            "strict": false,
+            "ddl": "CREATE TABLE SurfBoards (surfboard_id INTEGER PRIMARY KEY, surfboard_name TEXT, surfboard_type TEXT, surfboard_condtion TEXT, purchase_price INTEGER, surfboard_photo TEXT, rental_price INTEGER)",
+            "columns": [
+                {
+                    "name": "surfboard_id",
+                    "type": "INTEGER",
+                    "constraints": [
+                        {
+                            "type": "PRIMARY KEY",
+                            "definition": "PRIMARY KEY"
+                        }
+                    ]
+                },
+                {
+                    "name": "surfboard_name",
+                    "type": "TEXT"
+                },
+                {
+                    "name": "surfboard_type",
+                    "type": "TEXT"
+                },
+                {
+                    "name": "surfboard_condtion",
+                    "type": "TEXT"
+                },
+                {
+                    "name": "purchase_price",
+                    "type": "INTEGER"
+                },
+                {
+                    "name": "surfboard_photo",
+                    "type": "TEXT"
+                },
+                {
+                    "name": "rental_price",
+                    "type": "INTEGER"
+                }
+            ],
+            "rows": [
+                [
+                    1,
+                    "Firewire Mashup",
+                    "Shortboard",
+                    "Good",
+                    599,
+                    "\/static\/pictures\/mashup.png",
+                    15
+                ],
+                [
+                    2,
+                    "Firewire the Gem",
+                    "Longboard",
+                    "Excellent",
+                    1600,
+                    "\/static\/pictures\/firewire_gem.png",
+                    35
+                ],
+                [
+                    3,
+                    " Firewire Machando",
+                    "Shortboard",
+                    "New",
+                    2100,
+                    "\/static\/pictures\/machando.png",
+                    90
+                ],
+                [
+                    4,
+                    "Channel Island Beardneck",
+                    "Grovler",
+                    "New",
+                    1200,
+                    "\/static\/pictures\/channel_neckbeard.png",
+                    60
+                ],
+                [
+                    5,
+                    "Channel Island too hapy",
+                    "Shortboard",
+                    "Fair",
+                    1000,
+                    "\/static\/pictures\/file.png",
+                    50
+                ],
+                [
+                    6,
+                    "Firewire Too fish",
+                    "Fish",
+                    "New",
+                    1100,
+                    "\/static\/pictures\/fish.png",
+                    45
+                ],
+                [
+                    7,
+                    "Firewire Seaside",
+                    "Shortboard",
+                    "Good",
+                    1300,
+                    "\/static\/pictures\/seaside.png",
+                    50
+                ],
+                [
+                    8,
+                    "Firewire Volcanic",
+                    "Shortboard",
+                    "Fair",
+                    1300,
+                    "\/static\/pictures\/volcanic.png",
+                    45
+                ],
+                [
+                    9,
+                    "Firewire Greedy Beaver",
+                    "Mini mals",
+                    "New",
+                    879,
+                    "\/static\/pictures\/beaver.png",
+                    20
+                ],
+                [
+                    10,
+                    "Slaters design great white",
+                    "Middle",
+                    "Excellent",
+                    1499,
+                    "\/static\/pictures\/great.png",
+                    60
+                ],
+                [
+                    11,
+                    "Slaters Design Revo",
+                    "Middle",
+                    "Fair",
+                    1000,
+                    "\/static\/pictures\/revo.png",
+                    40
+                ],
+                [
+                    12,
+                    "Sharpeye Turbo",
+                    "Twin",
+                    "Good",
+                    1199,
+                    "\/static\/pictures\/turbo.png",
+                    45
+                ],
+                [
+                    13,
+                    "Thunderbolt",
+                    "Longboard",
+                    "New",
+                    2199,
+                    "\/static\/pictures\/thunderbolt.png",
+                    40
+                ],
+                [
+                    14,
+                    "Sharpeye dark arts",
+                    "Shortboard",
+                    "Good",
+                    1799,
+                    "\/static\/pictures\/inferno.png",
+                    90
+                ],
+                [
+                    15,
+                    "Firewire S boss",
+                    "Shortboard",
+                    "New",
+                    1200,
+                    "\/static\/pictures\/boss.png",
+                    60
+                ]
+            ]
+        }
+    ]
+}

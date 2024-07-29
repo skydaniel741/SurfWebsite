@@ -7,19 +7,19 @@
     <link rel="stylesheet" href="/static/start-pages.css">
     <link rel="stylesheet" href="/static/index.css"> 
 </head>
-<body class="body-lobby">
+<body class="body-lobby"> <!-- Setup for a clock -->
     <div class="bg"></div>
     <h1 id="date-time" class="centerd">12:15</h1> 
     <div class="redirect-footer">
-        <ul class="redirect-links">
-            <li><a href="/login">Login</a></li>
-            <li><a href="/signup">Sign Up</a></li>
+        <ul class="redirect-links"> <!-- Navagation Links -->
+            <li><a href="/login">Login</a></li> <!-- Redirect to login -->
+            <li><a href="/signup">Sign Up</a></li> <!-- Redirect to sign up  -->
         </ul>
     </div>
 </body>
 
 <script>
-setInterval(setTime, 1000);
+setInterval(setTime, 1000); 
 setTime();
 
 function setTime() {

@@ -1,18 +1,18 @@
-{% extends 'layout.html' %}
+{% extends 'layout.html' %} <!-- Extends the layout page -->
 {% block content %}
-<link rel="stylesheet" href="/static/index.js">
+<link rel="stylesheet" href="/static/index.js"> <!-- Linked to javascrpit -->
 <h1 class="top-screen">SURFBOARDS</h1>
 <div class="product-list">
-    {% for surfboard in surfboards %}
+    {% for surfboard in surfboards %} <!-- for surfboards in surfboards -->
     <div class="item">
-        {% if surfboard[5] %}
-        <img src="{{ surfboard[5] }}"  class="item-picture" alt="">
+        {% if surfboard[5] %} <!-- If surfboards is in the 5 table in the database -->
+        <img src="{{ surfboard[5] }}"  class="item-picture" alt=""> <!-- Display images from database in 5th coloum-->
         {% endif %}
-        <h2>{{ surfboard[1] }}</h2>
-        <div class="price">${{ surfboard[4] }}</div>
-        <h3>{{ surfboard[3] }}</h3>
-        <h4>{{ surfboard[2] }}</h4>
-        <form action="{{ url_for('add_to_cart') }}" method="post">
+        <h2>{{ surfboard[1] }}</h2> <!-- Display surfboard name from database -->
+        <div class="price">${{ surfboard[4] }}</div> <!-- Display surfboards price -->
+        <h3>{{ surfboard[3] }}</h3> <!--Display surfboard condtion -->
+        <h4>{{ surfboard[2] }}</h4> <!-- display surfboards length -->
+        <form action="{{ url_for('add_to_cart') }}" method="post"> <!-- not working yet -->
             <input type="hidden" name="surfboard_id" value="{{ surfboard[0] }}">
             <input type="hidden" name="surfboard_name" value="{{ surfboard[1] }}">
             <input type="hidden" name="purchase_price" value="{{ surfboard[2] }}">
@@ -21,27 +21,27 @@
         </form>
     </div>
 
-    {% endfor %}
+    {% endfor %} <!-- ends the for loop -->
 </div>
 
-<div class="cart-tab">
+<div class="cart-tab"> <!-- the body for the cart tab -->
     <h1>SHOPPING CART</h1>
     <div class="list-cart">
         <div class="cart-item">
             <div class="image">
-                <img src="/static/pictures/firewire_gem.png" alt="">
+                <img src="/static/pictures/firewire_gem.png" alt=""> <!--Refrence for the cart tab -->
             </div>
-            <div class="name">NAME</div>
-            <div class="total_price">$1</div>
+            <div class="name">NAME</div> <!-- product name-->
+            <div class="total_price">$1</div> <!--product price -->
             <div class="quantity">
-                <span class="remove"><</span>
+                <span class="remove"><</span> <!--Add or remove sliders -->
                 <span>1</span>
                 <span class="add">></span>
             </div>
         </div>
     </div>
     <div class="btn">
-        <button class="close">CLOSE</button>
+        <button class="close">CLOSE</button> <!--Button to close the pop up checkout page -->
         <button class="checkout">CHECKOUT</button>
     </div>
 </div>

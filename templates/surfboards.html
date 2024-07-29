@@ -1,5 +1,6 @@
 {% extends 'layout.html' %}
 {% block content %}
+<link rel="stylesheet" href="/static/index.js">
 <h1 class="top-screen">SURFBOARDS</h1>
 <div class="product-list">
     {% for surfboard in surfboards %}
@@ -19,6 +20,29 @@
             <button type="submit" class="add-cart">Add To Cart</button>
         </form>
     </div>
+
     {% endfor %}
+</div>
+
+<div class="cart-tab">
+    <h1>SHOPPING CART</h1>
+    <div class="list-cart">
+        <div class="cart-item">
+            <div class="image">
+                <img src="/static/pictures/firewire_gem.png" alt="">
+            </div>
+            <div class="name">NAME</div>
+            <div class="total_price">$1</div>
+            <div class="quantity">
+                <span class="remove"><</span>
+                <span>1</span>
+                <span class="add">></span>
+            </div>
+        </div>
+    </div>
+    <div class="btn">
+        <button class="close">CLOSE</button>
+        <button class="checkout">CHECKOUT</button>
+    </div>
 </div>
 {% endblock %}

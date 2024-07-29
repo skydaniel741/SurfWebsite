@@ -38,6 +38,7 @@ header{
     height: 100%;
     display: flex;
     transition: all 0.6s ease 0s;
+    letter-spacing: 1px;
 
 }
 
@@ -154,4 +155,73 @@ header .icon-cart span{
     letter-spacing: 4px;
     
 
+}
+
+body.showcart .cart-tab {
+    right: 0;
+}
+
+.cart-tab {
+    right: -400px;
+    transition: right 0.3s ease;
+}
+
+.cart-tab {
+    width: 400px;
+    background-color: #ececec;
+    color: black;
+    position: fixed;
+    inset: 0 -400px 0 auto;
+    display: grid;
+    grid-template-rows: 70px 1fr 70px;
+    transition: 0.5s;
+}
+
+.showcart .cart-tab {
+    inset: 0 0 0 auto;
+}
+
+.cart-tab h1 {
+    padding: 20px;
+    margin: 0;
+    font-weight: 300;
+}
+
+.cart-tab .btn {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.cart-tab .btn button {
+    background-color: #44a1a0;
+    border: none;
+    font-family: anton;
+    cursor: pointer;
+}
+
+.cart-tab .btn .checkout {
+    background-color: white;
+    color: black;
+}
+
+.cart-tab .list-cart .cart-item {
+    display: grid;
+    grid-template-columns: 70px 150px 50px 1fr;
+    align-items: center;
+    text-align: center;
+    font-family: anton;
+}
+
+.cart-tab .list-cart .cart-item .image img {
+    width: 50px;
+    height: auto;
+}
+
+.list-cart .quantity span {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    background-color: #fbfbfb;
+    border-radius: 50%;
+    cursor: pointer;
 }

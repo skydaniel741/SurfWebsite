@@ -27,6 +27,7 @@ def login():
             msg = 'Invalid username or password'
     return render_template("login.html", message=msg)
 
+
 @app.route("/logout")
 def logout():
     session.clear()
@@ -75,8 +76,20 @@ def surfboards():
 
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
- 
-    return "Bad Request: Missing form field", 400
+    if 'loggedin' in session:
+        surfboard_id = request.form['surfboard_id']
+        surfboard_name = request.form['surfboard_name']
+        purchase_price = request.form['purchase_price']
+
+        cart_item = {
+            'id': surfboard_id,
+            'name': surfboard_name,
+            'price': purchase_price,
+        }        
+
+        session['cart'].append(cart_item)
+        return redirect(url_for('surfboards'))
+
 
 @app.route('/checkout', methods=['GET', 'POST'])
 def checkout():

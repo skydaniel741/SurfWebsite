@@ -5,27 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lobby</title>
     <link rel="stylesheet" href="/static/start-pages.css">
-    <link rel="stylesheet" href="/index.js">
-
+    <link rel="stylesheet" href="/static/index.css"> 
 </head>
 <body class="body-lobby">
     <div class="bg"></div>
-    <h1 id="date-time" class="centerd">12:15</h1>
+    <h1 id="date-time" class="centerd">12:15</h1> 
     <div class="redirect-footer">
         <ul class="redirect-links">
-          <li><a href="/login">Login</a></li>
-          <li><a href="/signup">Sign Up</a></li>
+            <li><a href="/login">Login</a></li>
+            <li><a href="/signup">Sign Up</a></li>
         </ul>
     </div>
 </body>
 
 <script>
 setInterval(setTime, 1000);
-    setTime();
-    function setTime(){
-        var dt = new Date();
-        time = dt.toLocaleTimeString([], { hour:'2-digit',minute: '2-digit' });
-        document.getElementById('date-time').innerHTML = time;
+setTime();
+
+function setTime() {
+    var dt = new Date();
+    var time = dt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    var dateTimeElement = document.getElementById('date-time');
+    if (dateTimeElement) {
+        dateTimeElement.innerHTML = time;
+    } else {
+        console.error("Element with ID 'date-time' not found.");
     }
+}
 </script>
 </html>

@@ -41,9 +41,9 @@ def signup():
         username = request.form['username']
         password = request.form['password']
         if not re.match(r'^[A-Za-z]+$', username):
-            msg = 'Invalid Signup Try Again'
+            msg = 'Invalid Username Try Again'
         elif not re.match(r'^[A-Za-z0-9]+$', password):
-            msg = 'Invalid Signup Try Again'
+            msg = 'Invalid Password Try Again'
         else:
             conn = sqlite3.connect("SurfBoards.db")
             cur = conn.cursor()

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request, session
+from flask import Flask, render_template, redirect, url_for, request, session, jsonify
 import sqlite3
 import re
 from datetime import datetime
@@ -22,16 +22,39 @@ def login():
             session['user_id'] = user[0]
             session['username'] = user[1]
             session['cart'] = []  # Initialize cart in session
-            return redirect(url_for('home'))
+            return redirect(url_for('surfboards'))
         else:
             msg = 'Invalid username or password'
     return render_template("login.html", message=msg)
 
 
+@app.route('/surfboards_data')
+def surfboards_data():
+    conn = sqlite3.connect("SurfBoards.db")
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM SurfBoards")
+    surfboards = cur.fetchall()
+    conn.close()
+    surfboard_list = []
+    for row in surfboards:
+        surfboard = {
+            "id": row[0],
+            "name": row[1],
+            "type": row[2],
+            "condition": row[3],
+            "price": row[4],
+            "image": row[5],
+        }
+        surfboard_list.append(surfboard)
+
+    return jsonify(surfboard_list)
+
+
+
 @app.route("/logout")
 def logout():
     session.clear()
-    return redirect(url_for("home"))
+    return redirect(url_for("lobby"))
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -94,12 +117,6 @@ def add_to_cart():
 @app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
     return redirect(url_for('login'))
-
-
-@app.route('/home')
-def home():
-    return render_template("home.html")
-
 
 @app.route('/lobby')
 def lobby():

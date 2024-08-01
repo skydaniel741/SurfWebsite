@@ -6,6 +6,14 @@ from datetime import datetime
 app = Flask(__name__)
 app.secret_key = 'secretkey'
 
+def get_db_connection():
+    conn = sqlite3.connect('SurfBoards.db')
+    conn.row_factory = sqlite3.Row
+    return conn
+
+
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     msg = ''
@@ -97,26 +105,10 @@ def surfboards():
     return render_template("surfboards.html", surfboards=surfboards)
 
 
-@app.route('/add_to_cart', methods=['POST'])
-def add_to_cart():
-    if 'loggedin' in session:
-        surfboard_id = request.form['surfboard_id']
-        surfboard_name = request.form['surfboard_name']
-        purchase_price = request.form['purchase_price']
-
-        cart_item = {
-            'id': surfboard_id,
-            'name': surfboard_name,
-            'price': purchase_price,
-        }        
-
-        session['cart'].append(cart_item)
-        return redirect(url_for('surfboards'))
-
-
 @app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
-    return redirect(url_for('login'))
+    return render_template('checkout.html')
+
 
 @app.route('/lobby')
 def lobby():

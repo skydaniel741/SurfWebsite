@@ -28,7 +28,9 @@
 
 .login-sign{
    font-size: 4;
-   font-family: fjalla;
+   font-family: anton;
+   letter-spacing: 3px;
+   margin-top: 50px;
 }
 
 .active{

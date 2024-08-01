@@ -1,0 +1,7 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h1>Your Cart</h1>
+
+<h2>Total: ${{ total_price }}</h2>
+<a href="{{ url_for('checkout') }}">Proceed to Checkout</a>
+{% endblock %}

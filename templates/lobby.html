@@ -21,9 +21,9 @@
 <script>
 setInterval(setTime, 1000); 
 setTime();
-
+// working clock 
 function setTime() {
-    var dt = new Date();
+    var dt = new Date(); 
     var time = dt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     var dateTimeElement = document.getElementById('date-time');
     if (dateTimeElement) {

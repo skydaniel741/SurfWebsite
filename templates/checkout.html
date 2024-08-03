@@ -3,16 +3,12 @@
 {% block content %}
 <h1>Your Cart</h1>
 
-<div class="d-flex justify-content-center flex-wrap">
+<div class="">
     {% for item in cart %}
     <div class="card">
         <img src="{{ item.image }}" class="card-img-top" alt="{{ item.name }}">
         <div class="card-body">
             <h5 class="card-title">{{ item.name }}</h5>
-            <ul class="">
-                <li class="">Quantity: {{ item.quantity }}</li>
-                <li class="">Price: ${{ item.price * item.quantity }}</li>
-            </ul>
         </div>
         <div class="card-body">
             <form id="remove_from_cart_form_{{ item.surfboard_id }}" action="{{ url_for('remove_from_cart', surfboard_id=item.surfboard_id) }}" method="post">
@@ -26,10 +22,7 @@
 <div class="card text-center">
     <div class="card-body">
         <h5 class="card-title">Total:</h5>
-        <p class="card-text">${{ final_total | round(2) }}</p>
-        {% if cart %}
-            <a href="{{ url_for('checkout') }}" class="btn btn-success">Proceed to Checkout</a>
-        {% endif %}
+        <p class="card-text">${{ final_total}}</p>
     </div>
 </div>
 

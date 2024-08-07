@@ -1,7 +1,5 @@
 {% extends 'layout.html' %} <!-- Extends the layout page -->
 {% block content %}
-<link rel="stylesheet" href="/index.py">
-<link rel="stylesheet" href="/static/index.js"> <!-- Linked to javascrpit -->
 <h1 class="top-screen">SURFBOARDS</h1>
 <div class="product-list">
     {% for surfboard in surfboards %} <!-- for surfboards in surfboards -->
@@ -13,8 +11,8 @@
         <div class="price">${{ surfboard[4] }}</div> <!-- Display surfboards price -->
         <h3>{{ surfboard[3] }}</h3> <!--Display surfboard condtion -->
         <h4>{{ surfboard[2] }}</h4> <!-- display surfboards length -->
-        <form action="" method="post"> <!-- not working yet -->
-            <button type="submit" class="add-cart"> <a href="/{{surfboard.id}}/add_to_cart">Add To Cart</a></button>
+        <form action="{{ url_for('add_to_cart', surfboard_id=surfboard[0]) }}" method="post">
+            <button type="submit" class="add-cart">Add To Cart</button>
         </form>
     </div>
 

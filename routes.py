@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request, session, jsonify
+from flask import Flask, render_template, redirect, url_for, request, session, jsonify,flash
 import sqlite3
 import re
 from datetime import datetime
@@ -112,7 +112,7 @@ def checkout():
     
     conn = get_db_connection()
     cur = conn.cursor() 
-    
+    user_id = session['user_id']
     cart_items = session.get('cart', [])
     surfboards = []
     final_total = 0
@@ -125,7 +125,7 @@ def checkout():
                 'surfboard_id': surfboard['surfboard_id'],
                 'name': surfboard['surfboard_name'],
                 'type': surfboard['surfboard_type'],
-                'condition': surfboard['surfboard_condition'],
+                'condtion': surfboard['surfboard_condtion'],
                 'price': surfboard['purchase_price'],
                 'image': surfboard['surfboard_photo'],
                 'quantity': item['quantity']
@@ -136,6 +136,22 @@ def checkout():
     conn.close()
 
     return render_template('checkout.html', cart=surfboards, final_total=final_total)
+
+
+
+@app.route('/<int:surfboard_id>/add_to_cart', methods=["POST", "GET"])
+def add_to_cart(surfboard_id):
+    if 'loggedin' not in session:
+        flash('You must be logged in to add items to cart', category="danger")
+        return redirect(url_for("login"))
+    cart_items = session.get('cart', [])
+    item_in_cart = next((item for item in cart_items if item['surfboard_id'] == surfboard_id), None)
+    if item_in_cart:
+        item_in_cart['quantity'] += 1
+    else:
+        cart_items.append({'surfboard_id': surfboard_id, 'quantity': 1})
+    session['cart'] = cart_items  
+    return redirect(url_for('surfboards')) 
 
 
 @app.route('/lobby')

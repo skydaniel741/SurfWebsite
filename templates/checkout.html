@@ -11,9 +11,6 @@
             <h5 class="card-title">{{ item.name }}</h5>
         </div>
         <div class="card-body">
-            <form id="remove_from_cart_form_{{ item.surfboard_id }}" action="{{ url_for('remove_from_cart', surfboard_id=item.surfboard_id) }}" method="post">
-                <button type="submit" class="btn btn-danger" form="remove_from_cart_form_{{ item.surfboard_id }}">Remove</button>
-            </form>
         </div>
     </div>
     {% endfor %}

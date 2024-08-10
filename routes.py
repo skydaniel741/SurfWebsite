@@ -137,6 +137,15 @@ def checkout():
 
     return render_template('checkout.html', cart=surfboards, final_total=final_total)
 
+@app.route('/<int:surfboard_id>/remove_from_cart', methods=['POST'])
+def remove_from_cart(surfboard_id):
+    if 'loggedin' not in session:
+        flash('You must be logged in to remove items from the cart')
+        return redirect(url_for('login'))
+    cart_items = session.get('cart', [])
+    cart_items = [item for item in cart_items if item['surfboard_id'] != surfboard_id]
+    session['cart'] = cart_items
+    return redirect(url_for('checkout'))
 
 
 @app.route('/<int:surfboard_id>/add_to_cart', methods=["POST", "GET"])

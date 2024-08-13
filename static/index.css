@@ -230,3 +230,11 @@ body.showcart .cart-tab {
 .icon-cart{
     cursor: pointer;
 }
+
+.cart-name{
+    text-align: center;
+    padding: 20px;
+    font-family: anton;
+    word-spacing: 5px;
+}
+

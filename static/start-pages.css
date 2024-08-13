@@ -87,6 +87,7 @@ input{
     font-size: 14px; 
     font-family: Fjalla One;
     color: #fffffa;
+    margin: -25px;
 }
 
 .signup-link{

@@ -1,22 +1,22 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<h1>Your Cart</h1>
+<h1 class="cart-name">Your Cart</h1>
 
-<div class="d-flex justify-content-center flex-wrap">
+<div class="main-card-body">
     {% for item in cart %}
     <div class="card">
-        <img src="{{ item.image }}" class="card-img-top" alt="{{ item.name }}">
+        <img src="{{ item.image }}" class="card-img" alt="{{ item.name }}">
         <div class="card-body">
             <h5 class="card-title">{{ item.name }}</h5>
-            <ul class="list-group list-group-flush">
+            <ul class="card-lists">
                 <li class="list-group-item">Quantity: {{ item.quantity }}</li>
                 <li class="list-group-item">Price: ${{ item.price * item.quantity }}</li>
             </ul>
         </div>
         <div class="card-body">
             <form id="remove_from_cart_form_{{ item.surfboard_id }}" action="{{ url_for('remove_from_cart', surfboard_id=item.surfboard_id) }}" method="post">
-                <button type="submit" class="btn btn-danger" form="remove_from_cart_form_{{ item.surfboard_id }}">Remove</button>
+                <button type="submit" class="remove-btn" form="remove_from_cart_form_{{ item.surfboard_id }}">Remove</button>
             </form>
         </div>
     </div>
@@ -27,9 +27,6 @@
     <div class="card-body">
         <h5 class="card-title">Total:</h5>
         <p class="card-text">${{ final_total | round(2) }}</p>
-        {% if cart %}
-            <a href="{{ url_for('checkout') }}" class="btn btn-success">Proceed to Checkout</a>
-        {% endif %}
     </div>
 </div>
 

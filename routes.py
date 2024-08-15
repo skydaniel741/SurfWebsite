@@ -147,7 +147,17 @@ def remove_from_cart(surfboard_id):
     session['cart'] = cart_items
     return redirect(url_for('checkout'))
 
-
+@app.route('/<int:surfboard_id>/purchase_product', methods=['POST'])
+def purchase_product(surfboard_id):
+    user_id = session['user_id']
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("INSERT INTO Checkout (user_id, surfboard_id) VALUES (?, ?)", ( user_id, surfboard_id))
+    conn.commit()
+    conn.close()
+    flash('Thank you for your purchase!', category='success')
+    return redirect(url_for('checkout'))
+    
 @app.route('/<int:surfboard_id>/add_to_cart', methods=["POST", "GET"])
 def add_to_cart(surfboard_id):
     if 'loggedin' not in session:
@@ -160,7 +170,7 @@ def add_to_cart(surfboard_id):
     else:
         cart_items.append({'surfboard_id': surfboard_id, 'quantity': 1})
     session['cart'] = cart_items  
-    return redirect(url_for('surfboards')) 
+    return redirect(url_for('checkout')) 
 
 
 @app.route('/lobby')

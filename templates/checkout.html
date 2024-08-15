@@ -1,6 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block content %}
+<link rel="stylesheet" href="/static/cart.css">
 <h1 class="cart-name">Your Cart</h1>
 
 <div class="main-card-body">
@@ -20,8 +21,17 @@
             </form>
         </div>
     </div>
+    <div class="buy-btn">
+        <form action="{{ url_for('purchase_product', surfboard_id=item.surfboard_id) }}" method="post">
+            <button type="submit" class="btn btn-primary">Buy</button>
+    </form>
+</div>
+
+
     {% endfor %}
 </div>
+
+
 
 <div class="card text-center">
     <div class="card-body">
@@ -29,5 +39,8 @@
         <p class="card-text">${{ final_total | round(2) }}</p>
     </div>
 </div>
+
+
+
 
 {% endblock %}

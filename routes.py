@@ -11,9 +11,6 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
-
-
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     msg = ''
@@ -147,21 +144,24 @@ def remove_from_cart(surfboard_id):
     session['cart'] = cart_items
     return redirect(url_for('checkout'))
 
-@app.route('/<int:surfboard_id>/purchase_product', methods=['POST'])
-def purchase_product(surfboard_id):
-    user_id = session['user_id']
+@app.route('/purchase_products', methods=['POST'])
+def purchase_products():   
+    username = session['user_id']
+    cart_items = session.get('cart', [])  
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute("INSERT INTO Checkout (user_id, surfboard_id) VALUES (?, ?)", ( user_id, surfboard_id))
+    for item in cart_items:
+        cur.execute("INSERT INTO Checkout (username, surfboard_id) VALUES (?, ?)", (username, item['surfboard_id']))
     conn.commit()
     conn.close()
+    session['cart'] = [] 
     flash('Thank you for your purchase!', category='success')
     return redirect(url_for('checkout'))
     
 @app.route('/<int:surfboard_id>/add_to_cart', methods=["POST", "GET"])
 def add_to_cart(surfboard_id):
     if 'loggedin' not in session:
-        flash('You must be logged in to add items to cart', category="danger")
+        flash('You must be logged in to add items to cart')
         return redirect(url_for("login"))
     cart_items = session.get('cart', [])
     item_in_cart = next((item for item in cart_items if item['surfboard_id'] == surfboard_id), None)

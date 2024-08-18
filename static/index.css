@@ -67,7 +67,7 @@ header .icon-cart span{
     border-radius: 50px;
     position: absolute;
 }
-footer, body,html{
+html, body {
     height: 100%;
     margin: 0;
     padding: 0;
@@ -75,12 +75,15 @@ footer, body,html{
     flex-direction: column;
 }
 
-
+main {
+    flex: 1; 
+}
 
 .footer-cont {
     background-color: #44a1a0;
     padding: 20px;
-    text-align: center;}
+    text-align: center;
+}
 
 .footer-nav {
     text-align: center;

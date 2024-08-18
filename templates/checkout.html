@@ -12,7 +12,7 @@
             <h5 class="card-title">{{ item.name }}</h5>
             <ul class="card-lists">
                 <li class="list-group-item">Quantity: {{ item.quantity }}</li>
-                <li class="list-group-item">Price: ${{ item.price * item.quantity }}</li>
+                <li class="list-group-item">Price ${{ item.price * item.quantity }}</li>
             </ul>
         </div>
         <div class="card-body">
@@ -20,27 +20,18 @@
                 <button type="submit" class="remove-btn" form="remove_from_cart_form_{{ item.surfboard_id }}">Remove</button>
             </form>
         </div>
+        <div class="body-buy-btn">
+            <form action="{{ url_for('purchase_products') }}" method="post">
+                <button type="submit" class="buy-btn">Buy All</button>
+            </form>
+        </div>
     </div>
-    <div class="buy-btn">
-        <form action="{{ url_for('purchase_product', surfboard_id=item.surfboard_id) }}" method="post">
-            <button type="submit" class="btn btn-primary">Buy</button>
-    </form>
-</div>
-
-
     {% endfor %}
 </div>
 
-
-
-<div class="card text-center">
-    <div class="card-body">
-        <h5 class="card-title">Total:</h5>
-        <p class="card-text">${{ final_total | round(2) }}</p>
-    </div>
+<div class="total-body">
+    <h5 class="card-title">Total:</h5>
+    <p class="card-text">${{ final_total | round(2) }}</p>
 </div>
-
-
-
 
 {% endblock %}

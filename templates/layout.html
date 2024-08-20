@@ -35,7 +35,19 @@
         
         {%block content%} {%endblock%} 
     </main>
-    
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="alert-container">
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
     <footer class="footer">
         <div class="footer-cont">
             <div class="footer-nav">
@@ -50,19 +62,5 @@
             </div>
         </div>
     </footer>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    <div class="alert-container">
-      {% for category, message in messages %}
-        <div class="alert alert-{{ category }}">
-          {{ message }}
-        </div>
-      {% endfor %}
-    </div>
-  {% endif %}
-{% endwith %}
-
-
-
 </body>
 </html>

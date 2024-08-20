@@ -20,7 +20,7 @@
     background: transparent;
     border: 4px solid;
     border-radius: 20px;
-    backdrop-filter: blur(9px);
+    backdrop-filter: blur(8px);
     color: #fffffa;
     margin: 5%;
 }

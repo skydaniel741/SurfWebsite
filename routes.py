@@ -144,18 +144,28 @@ def remove_from_cart(surfboard_id):
     session['cart'] = cart_items
     return redirect(url_for('checkout'))
 
+
+@app.route('/brands')
+def brands():
+    conn = sqlite3.connect("SurfBoards.db")
+    cur = conn.cursor()
+    cur.execute("SELECT *  FROM SurfBoards")
+    surfboards = cur.fetchall()
+    conn.close()
+    return render_template("brands.html", surfboards=surfboards)
+
 @app.route('/purchase_products', methods=['POST'])
 def purchase_products():   
-    username = session['user_id']
+    user_id = session['user_id']
     cart_items = session.get('cart', [])  
     conn = get_db_connection()
     cur = conn.cursor()
     for item in cart_items:
-        cur.execute("INSERT INTO Checkout (username, surfboard_id) VALUES (?, ?)", (username, item['surfboard_id']))
+        cur.execute("INSERT INTO Checkout (user_id, surfboard_id) VALUES (?, ?)", (user_id, item['surfboard_id']))
     conn.commit()
     conn.close()
     session['cart'] = [] 
-    flash('Thank you for your purchase!', category='success')
+    flash('Thank you for your purchase!')
     return redirect(url_for('checkout'))
     
 @app.route('/<int:surfboard_id>/add_to_cart', methods=["POST", "GET"])

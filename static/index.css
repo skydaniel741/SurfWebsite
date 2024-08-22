@@ -178,3 +178,52 @@ main {
     word-spacing: 5px;
 }
 
+
+.brand-cont {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 10px;
+}
+
+.brand-item {
+    position: relative;
+    margin: 30px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.brand-pic {
+    width: 250px;
+    height: 200px;
+    border-radius: 10px; 
+    border: 2px solid;
+    box-shadow: 0 70px 40px rgba(0, 0, 0, 0.1);
+    transition: all 1s ease 0.2s;
+}
+
+.brand-pic:hover {
+    filter: blur(4px);
+    transform: scaleY(0.99);
+}
+
+.brand-name {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: grey;
+   align-items: center;
+   margin-bottom: 70px;
+   opacity: 0;
+   transition: all 1s ease 0.2s;
+   font-family: anton;
+   letter-spacing: 2px;
+   font-size: 30px;
+
+}
+
+.brand-item:hover .brand-name{
+    transition: all 1s ease 0.2s;
+    opacity: 1;
+}

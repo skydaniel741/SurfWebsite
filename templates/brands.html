@@ -1,21 +1,14 @@
-{%extends 'layout.html' %}
-{%block content %}
+{% extends 'layout.html' %}
+{% block content %}
 
 <h1 class="top-screen">Brands</h1>
+<div class="brand-cont">
+    {% for brand in brands %}
+    <a href="{{ url_for('surfboards_by_brand', brand_name=brand[1]) }}" class="brand-item">
+        <img src="{{ brand[2] }}" class="brand-pic" alt="{{ brand[1] }}">
+        <h2 class="brand-name">{{ brand[1] }}</h2>
+    </a>
+    {% endfor %}
+</div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{%endblock%}
+{% endblock %}

@@ -26,33 +26,11 @@ def login():
             session['loggedin'] = True
             session['user_id'] = user[0]
             session['username'] = user[1]
-            session['cart'] = []  # Initialize cart in session
+            session['cart'] = []  
             return redirect(url_for('surfboards'))
         else:
             msg = 'Invalid username or password'
     return render_template("login.html", message=msg)
-
-
-@app.route('/surfboards_data')
-def surfboards_data():
-    conn = sqlite3.connect("SurfBoards.db")
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM SurfBoards")
-    surfboards = cur.fetchall()
-    conn.close()
-    surfboard_list = []
-    for row in surfboards:
-        surfboard = {
-            "id": row[0],
-            "name": row[1],
-            "type": row[2],
-            "condition": row[3],
-            "price": row[4],
-            "image": row[5],
-        }
-        surfboard_list.append(surfboard)
-
-    return jsonify(surfboard_list)
 
 
 
@@ -144,15 +122,24 @@ def remove_from_cart(surfboard_id):
     session['cart'] = cart_items
     return redirect(url_for('checkout'))
 
+@app.route('/surfboards/brand/<brand_name>')
+def surfboards_by_brand(brand_name):
+    conn = sqlite3.connect("SurfBoards.db")
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM SurfBoards WHERE surfboard_name LIKE ?", ('%' + brand_name + '%',))
+    surfboards = cur.fetchall()
+    conn.close()
+    return render_template("surfboards.html", surfboards=surfboards, brand_name=brand_name)
+
 
 @app.route('/brands')
 def brands():
     conn = sqlite3.connect("SurfBoards.db")
     cur = conn.cursor()
-    cur.execute("SELECT *  FROM SurfBoards")
-    surfboards = cur.fetchall()
+    cur.execute("SELECT *  FROM Brands")
+    brands = cur.fetchall()
     conn.close()
-    return render_template("brands.html", surfboards=surfboards)
+    return render_template("brands.html", brands=brands)
 
 @app.route('/purchase_products', methods=['POST'])
 def purchase_products():   

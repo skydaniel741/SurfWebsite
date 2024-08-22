@@ -1,23 +1,25 @@
-{% extends 'layout.html' %} <!-- Extends the layout page -->
+{% extends 'layout.html' %} <!-- extends the layout page -->
 {% block content %}
+
 <h1 class="top-screen">SURFBOARDS</h1>
 <div class="product-list">
-    {% for surfboard in surfboards %} <!-- for surfboards in surfboards -->
+    
+    {% for surfboard in surfboards %} <!-- loop through the filtered surfboards -->
     <div class="item">
-        {% if surfboard[5] %} <!-- If surfboards is in the 5 table in the database -->
-        <img src="{{ surfboard[5] }}"  class="item-picture" alt=""> <!-- Display images from database in 5th coloum-->
+        {% if surfboard[5] %} <!-- if the surfboard has an image (in the 5th column of the database) -->
+        <img src="{{ surfboard[5] }}" class="item-picture" alt="{{ surfboard[1] }}"> <!-- display the surfboard image -->
         {% endif %}
-        <h2>{{ surfboard[1] }}</h2> <!-- Display surfboard name from database -->
-        <div class="price">${{ surfboard[4] }}</div> <!-- Display surfboards price -->
-        <h3>{{ surfboard[3] }}</h3> <!--Display surfboard condtion -->
-        <h4>{{ surfboard[2] }}</h4> <!-- display surfboards length -->
-        <form action="{{ url_for('add_to_cart', surfboard_id=surfboard[0]) }}" method="post">
-            <button type="submit" class="add-cart">Add To Cart</button>
+        
+        <h2>{{ surfboard[1] }}</h2> <!-- display the surfboard name -->
+        <div class="price">${{ surfboard[4] }}</div> <!-- display the surfboard's price -->
+        <h3>{{ surfboard[3] }}</h3> <!-- display the surfboard's condition -->
+        <h4>{{ surfboard[2] }}</h4> <!-- display the surfboard's type or length -->
+        
+        <form action="{{ url_for('add_to_cart', surfboard_id=surfboard[0]) }}" method="post"> <!-- form to add the surfboard to the cart -->
+            <button type="submit" class="add-cart">add to cart</button> <!-- add to cart button -->
         </form>
     </div>
-
-    {% endfor %} <!-- ends the for loop -->
+    {% endfor %} <!-- end of the loop through surfboards -->
 </div>
-
 
 {% endblock %}

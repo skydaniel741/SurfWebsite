@@ -16,12 +16,17 @@
     <a href="/surfboard"><img src="/static/pictures/surflogo.png" class="logo"></a>
     
     <nav>
-        <ul class="nav-links"> <!-- Navigation links -->
-            <li><a href="/surfboard">SHOPS</a></li>
-            <li><a href="/brands">BRANDS</a></li>
-            <li><a href="/lobby">LOGOUT</a></li>
-        </ul>
-    </nav>
+      <ul class="nav-links">
+          {% if session.get('loggedin') %}
+              <li><a href="/surfboard">SHOPS</a></li>
+              <li><a href="/brands">BRANDS</a></li>
+              <li><a href="/logout">LOGOUT</a></li>
+          {% else %}
+              <li><a href="/login">Login</a></li>
+              <li><a href="/signup">Sign Up</a></li>
+          {% endif %}
+      </ul>
+  </nav>
     <!-- Cart icon -->
     <div class="icon-cart">
             <a href="/checkout"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" viewBox="0 0 24 24">

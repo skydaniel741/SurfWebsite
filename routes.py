@@ -1,6 +1,7 @@
-from flask import Flask, render_template, redirect, url_for, request, session, jsonify,flash
+from flask import Flask, render_template, redirect, url_for, request, session, flash
 import sqlite3
 import re
+from functools import wraps
 from datetime import datetime
 
 app = Flask(__name__)
@@ -10,6 +11,15 @@ def get_db_connection():
     conn = sqlite3.connect('SurfBoards.db')
     conn.row_factory = sqlite3.Row
     return conn
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session.get('loggedin'):
+            flash('You need to login first', 'error')
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -71,16 +81,18 @@ def layout():
 
 
 @app.route('/surfboard')
+@login_required
 def surfboards():
     conn = sqlite3.connect("SurfBoards.db")
     cur = conn.cursor()
-    cur.execute("SELECT *  FROM SurfBoards")
+    cur.execute("SELECT * FROM SurfBoards")
     surfboards = cur.fetchall()
     conn.close()
     return render_template("surfboards.html", surfboards=surfboards)
 
 
 @app.route('/checkout', methods=['GET', 'POST'])
+@login_required
 def checkout():
     if 'loggedin' not in session:
         return redirect(url_for('login'))
@@ -113,6 +125,7 @@ def checkout():
     return render_template('checkout.html', cart=surfboards, final_total=final_total)
 
 @app.route('/<int:surfboard_id>/remove_from_cart', methods=['POST'])
+@login_required
 def remove_from_cart(surfboard_id):
     if 'loggedin' not in session:
         flash('You must be logged in to remove items from the cart')
@@ -123,7 +136,11 @@ def remove_from_cart(surfboard_id):
     return redirect(url_for('checkout'))
 
 @app.route('/surfboards/brand/<brand_name>')
+@login_required
 def surfboards_by_brand(brand_name):
+    if 'loggedin' not in session:
+        flash('You must be logged in to add items to cart')
+        return redirect(url_for("login"))
     conn = sqlite3.connect("SurfBoards.db")
     cur = conn.cursor()
     cur.execute("SELECT * FROM SurfBoards WHERE surfboard_name LIKE ?", ('%' + brand_name + '%',))
@@ -133,7 +150,11 @@ def surfboards_by_brand(brand_name):
 
 
 @app.route('/brands')
+@login_required
 def brands():
+    if 'loggedin' not in session:
+        flash('You must be logged in to add items to cart')
+        return redirect(url_for("login"))
     conn = sqlite3.connect("SurfBoards.db")
     cur = conn.cursor()
     cur.execute("SELECT *  FROM Brands")
@@ -142,6 +163,7 @@ def brands():
     return render_template("brands.html", brands=brands)
 
 @app.route('/purchase_products', methods=['POST'])
+@login_required
 def purchase_products():   
     user_id = session['user_id']
     cart_items = session.get('cart', [])  
@@ -156,6 +178,7 @@ def purchase_products():
     return redirect(url_for('checkout'))
     
 @app.route('/<int:surfboard_id>/add_to_cart', methods=["POST", "GET"])
+@login_required
 def add_to_cart(surfboard_id):
     if 'loggedin' not in session:
         flash('You must be logged in to add items to cart')

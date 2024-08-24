@@ -120,6 +120,11 @@ main {
     width: 200px;  
 }
 
+.surfboard-name{
+    font-family: anton;
+}
+
+
 .product-list {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

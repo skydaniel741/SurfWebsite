@@ -17,14 +17,9 @@
     
     <nav>
       <ul class="nav-links">
-          {% if session.get('loggedin') %}
               <li><a href="/surfboard">SHOPS</a></li>
               <li><a href="/brands">BRANDS</a></li>
-              <li><a href="/logout">LOGOUT</a></li>
-          {% else %}
-              <li><a href="/login">Login</a></li>
-              <li><a href="/signup">Sign Up</a></li>
-          {% endif %}
+              <li><a href="/logout">EXIT</a></li>
       </ul>
   </nav>
     <!-- Cart icon -->
@@ -57,7 +52,7 @@
         <div class="footer-cont">
             <div class="footer-nav">
                 <ul class="footer-links"> <!-- Footer navigation links -->
-                    <li><a href="/home">Home</a></li>
+                    <li><a href="/surfboard">Home</a></li>
                     <li><a href="/surfboard">Products</a></li>
                     <li><a href="/brands">Brands</a></li>
                 </ul>

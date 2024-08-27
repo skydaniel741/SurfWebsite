@@ -15,6 +15,7 @@
     padding: 10px;
     border-radius: 8px;
     border-color: black;
+    height: 100%;
 }
 
 .card-img {
@@ -52,6 +53,7 @@
     width: 200px;
     border: none;
    background-color:red ;
+   margin-bottom: 10px;
 }
 
 .remove-btn :hover{
@@ -64,7 +66,17 @@
     width: 200px;
     border: none;
     background-color: #44a1a0;
+    padding: 5px;
 }
+
+.login-btn {
+    cursor: pointer;
+    border-radius: 20px;
+    width: 200px;
+    border: none;
+    background-color: #44a1a0;
+    padding: 5px;
+    margin-top: 10px;}
 
 .alert-container{
     text-align: center;

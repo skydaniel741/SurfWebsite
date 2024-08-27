@@ -12,15 +12,6 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if not session.get('loggedin'):
-            flash('You need to login first', 'error')
-            return redirect(url_for('login'))
-        return f(*args, **kwargs)
-    return decorated_function
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     msg = ''
@@ -37,6 +28,9 @@ def login():
             session['user_id'] = user[0]
             session['username'] = user[1]
             session['cart'] = []  
+            next_page = request.args.get('next')
+            if next_page:
+                return redirect(next_page)
             return redirect(url_for('surfboards'))
         else:
             msg = 'Invalid username or password'
@@ -56,10 +50,12 @@ def signup():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        if not re.match(r'^[A-Za-z]+$', username):
+        if not re.match(r'^[A-Za-z0-9]+$', username):
             msg = 'Invalid Username Try Again'
+            msg = 'Only can Have letters and numbers'
         elif not re.match(r'^[A-Za-z0-9]+$', password):
             msg = 'Invalid Password Try Again'
+            msg = 'Only can have letters and numbers'
         else:
             conn = sqlite3.connect("SurfBoards.db")
             cur = conn.cursor()
@@ -81,7 +77,6 @@ def layout():
 
 
 @app.route('/surfboard')
-@login_required
 def surfboards():
     conn = sqlite3.connect("SurfBoards.db")
     cur = conn.cursor()
@@ -92,14 +87,9 @@ def surfboards():
 
 
 @app.route('/checkout', methods=['GET', 'POST'])
-@login_required
 def checkout():
-    if 'loggedin' not in session:
-        return redirect(url_for('login'))
-    
     conn = get_db_connection()
-    cur = conn.cursor() 
-    user_id = session['user_id']
+    cur = conn.cursor()
     cart_items = session.get('cart', [])
     surfboards = []
     final_total = 0
@@ -112,49 +102,48 @@ def checkout():
                 'surfboard_id': surfboard['surfboard_id'],
                 'name': surfboard['surfboard_name'],
                 'type': surfboard['surfboard_type'],
-                'condtion': surfboard['surfboard_condtion'],
+                'condition': surfboard['surfboard_condtion'],
                 'price': surfboard['purchase_price'],
                 'image': surfboard['surfboard_photo'],
                 'quantity': item['quantity']
             }
             final_total += surfboard['purchase_price'] * item['quantity']
-            surfboards.append(surfboard_dict) 
+            surfboards.append(surfboard_dict)
 
     conn.close()
 
-    return render_template('checkout.html', cart=surfboards, final_total=final_total)
+    return render_template('checkout.html', cart=surfboards,  
+                           final_total=final_total)
+
 
 @app.route('/<int:surfboard_id>/remove_from_cart', methods=['POST'])
-@login_required
 def remove_from_cart(surfboard_id):
-    if 'loggedin' not in session:
-        flash('You must be logged in to remove items from the cart')
-        return redirect(url_for('login'))
     cart_items = session.get('cart', [])
-    cart_items = [item for item in cart_items if item['surfboard_id'] != surfboard_id]
+    cart_items = [item for item in cart_items 
+        if item['surfboard_id'] != surfboard_id]
     session['cart'] = cart_items
     return redirect(url_for('checkout'))
 
+
 @app.route('/surfboards/brand/<brand_name>')
-@login_required
 def surfboards_by_brand(brand_name):
-    if 'loggedin' not in session:
-        flash('You must be logged in to add items to cart')
-        return redirect(url_for("login"))
     conn = sqlite3.connect("SurfBoards.db")
     cur = conn.cursor()
-    cur.execute("SELECT * FROM SurfBoards WHERE surfboard_name LIKE ?", ('%' + brand_name + '%',))
+    cur.execute(
+        "SELECT * FROM SurfBoards WHERE surfboard_name LIKE ?",
+        ('%' + brand_name + '%',)
+    )
     surfboards = cur.fetchall()
     conn.close()
-    return render_template("surfboards.html", surfboards=surfboards, brand_name=brand_name)
+    return render_template(
+        "surfboards.html",
+        surfboards=surfboards,
+        brand_name=brand_name
+    )
 
 
 @app.route('/brands')
-@login_required
 def brands():
-    if 'loggedin' not in session:
-        flash('You must be logged in to add items to cart')
-        return redirect(url_for("login"))
     conn = sqlite3.connect("SurfBoards.db")
     cur = conn.cursor()
     cur.execute("SELECT *  FROM Brands")
@@ -162,27 +151,33 @@ def brands():
     conn.close()
     return render_template("brands.html", brands=brands)
 
+
 @app.route('/purchase_products', methods=['POST'])
-@login_required
-def purchase_products():   
-    user_id = session['user_id']
+def purchase_products():
     cart_items = session.get('cart', [])  
     conn = get_db_connection()
     cur = conn.cursor()
+    user_id = session.get('user_id', None)
     for item in cart_items:
-        cur.execute("INSERT INTO Checkout (user_id, surfboard_id) VALUES (?, ?)", (user_id, item['surfboard_id']))
+        cur.execute("SELECT surfboard_name, purchase_price FROM SurfBoards WHERE surfboard_id = ?",
+                     (item['surfboard_id'],))
+        surfboard = cur.fetchone()
+        if surfboard:
+            surfboard_name = surfboard['surfboard_name']
+            purchase_price = surfboard['purchase_price']
+            if user_id:
+                cur.execute
+    ("INSERT INTO Checkout (user_id, surfboard_id, surfboard_name, purchase_price) VALUES (?, ?, ?, ?)", 
+     (user_id, item['surfboard_id'], surfboard_name, purchase_price))
     conn.commit()
     conn.close()
     session['cart'] = [] 
     flash('Thank you for your purchase!')
+    flash('Please come to the nearest workshop for payment')
     return redirect(url_for('checkout'))
     
 @app.route('/<int:surfboard_id>/add_to_cart', methods=["POST", "GET"])
-@login_required
 def add_to_cart(surfboard_id):
-    if 'loggedin' not in session:
-        flash('You must be logged in to add items to cart')
-        return redirect(url_for("login"))
     cart_items = session.get('cart', [])
     item_in_cart = next((item for item in cart_items if item['surfboard_id'] == surfboard_id), None)
     if item_in_cart:
@@ -191,7 +186,6 @@ def add_to_cart(surfboard_id):
         cart_items.append({'surfboard_id': surfboard_id, 'quantity': 1})
     session['cart'] = cart_items  
     return redirect(url_for('checkout')) 
-
 
 @app.route('/lobby')
 def lobby():

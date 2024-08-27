@@ -21,9 +21,13 @@
             </form>
         </div>
         <div class="body-buy-btn">
+            {% if session.loggedin %}
             <form action="{{ url_for('purchase_products') }}" method="post">
                 <button type="submit" class="buy-btn">Buy All</button>
             </form>
+            {% else %}
+            <a href="{{ url_for('login') }}" class="login-btn">Login To Buy </a>
+            {% endif %}
         </div>
     </div>
     {% endfor %}
@@ -32,6 +36,9 @@
 <div class="total-body">
     <h5 class="card-title">Total:</h5>
     <p class="card-text">${{ final_total | round(2) }}</p>
+    {% if not cart %}
+    <p>Nothing to see here</p>
+    {% endif %}
 </div>
 
 {% endblock %}

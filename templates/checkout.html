@@ -1,42 +1,42 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<link rel="stylesheet" href="/static/cart.css">
+<link rel="stylesheet" href="/static/cart.css">  <!-- links it to the cart.css-->
 <h1 class="cart-name">Your Cart</h1>
 
 <div class="main-card-body">
-    {% for item in cart %}
+    {% for item in cart %}  <!--for items in the cart  -->
     <div class="card">
-        <img src="{{ item.image }}" class="card-img" alt="{{ item.name }}">
-        <div class="card-body">
-            <h5 class="card-title">{{ item.name }}</h5>
+        <img src="{{ item.image }}" class="card-img" alt="{{ item.name }}">  <!-- displays the item image in the cart fetched by surfboards -->
+        <div class="card-body">  <!-- card body display -->
+            <h5 class="card-title">{{ item.name }}</h5>  <!-- items name -->
             <ul class="card-lists">
-                <li class="list-group-item">Quantity: {{ item.quantity }}</li>
-                <li class="list-group-item">Price ${{ item.price * item.quantity }}</li>
+                <li class="list-group-item">Quantity: {{ item.quantity }}</li> 
+                <li class="list-group-item">Price ${{ item.price * item.quantity }}</li>  <!-- the price times the number of same product -->
             </ul>
         </div>
         <div class="card-body">
             <form id="remove_from_cart_form_{{ item.surfboard_id }}" action="{{ url_for('remove_from_cart', surfboard_id=item.surfboard_id) }}" method="post">
-                <button type="submit" class="remove-btn" form="remove_from_cart_form_{{ item.surfboard_id }}">Remove</button>
+                <button type="submit" class="remove-btn" form="remove_from_cart_form_{{ item.surfboard_id }}">Remove</button>  <!-- remove button with the url to the route of remove from cart-->
             </form>
         </div>
         <div class="body-buy-btn">
-            {% if session.loggedin %}
+            {% if session.loggedin %}  <!-- if session is logged in display buy all-->
             <form action="{{ url_for('purchase_products') }}" method="post">
                 <button type="submit" class="buy-btn">Buy All</button>
             </form>
-            {% else %}
-            <a href="{{ url_for('login') }}" class="login-btn">Login To Buy </a>
+            {% else %}  <!-- else if its not display print login -->
+            <a href="{{ url_for('login') }}" class="login-btn">Login To Buy </a>  <!-- button-->
             {% endif %}
         </div>
     </div>
     {% endfor %}
 </div>
 
-<div class="total-body">
+<div class="total-body">  <!-- final totla  -->
     <h5 class="card-title">Total:</h5>
     <p class="card-text">${{ final_total | round(2) }}</p>
-    {% if not cart %}
+    {% if not cart %}  <!--when nothing is in cart print message -->
     <p>Nothing to see here</p>
     {% endif %}
 </div>

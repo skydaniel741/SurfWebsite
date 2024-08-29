@@ -6,7 +6,7 @@
     <title>Signup</title>
     <link rel="stylesheet" href="/static/start-pages.css">
 </head>
-<body class="body-signup"> <!-- Body signup page -->
+<body class="body-signup"> <!-- body signup page -->
     <div id="preloader"></div>
     <div class="signup">
         <h1 class="login-sign">Signup</h1>
@@ -16,14 +16,14 @@
                 <input type="text" placeholder="Username" name="username" id="username" required class="spacing"> <!--required an input -->
                 <label for="password"></label>
                 <input type="text" placeholder="Password" name="password" id="password" required class="spacing"> <!-- input required -->
-                <input type="submit" value="Signup" class="login-button"> <!-- Button for login -->
+                <input type="submit" value="Signup" class="login-button"> <!-- button for login -->
             </div>
         </form>
-        <div id="error" style="color: red; font-weight: bold; margin: -10px;" > <!-- Dislpay an error message if an error occured -->
+        <div id="error" style="color: red; font-weight: bold; margin: -10px;" > <!-- dislpay an error message if an error occured -->
             {{ message }}
         </div>
         <div>
-            <h2 class="login-link"> Already Have Account?<a href="{{ url_for('login') }}" class="signup-link">LOGIN</a></h2>  <!-- Redirect to login page if already have an account -->
+            <h2 class="login-link"> Already Have Account?<a href="{{ url_for('login') }}" class="signup-link">LOGIN</a></h2>  <!-- redirect to login page if already have an account -->
         </div>
     </div>
 </body>

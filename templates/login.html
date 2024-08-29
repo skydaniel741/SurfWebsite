@@ -6,24 +6,24 @@
     <title>Login</title>
     <link rel="stylesheet" href="/static/start-pages.css">
 </head>
-<body class="body-login"> <!-- Body login page  -->
+<body class="body-login"> <!-- body login page  -->
     <div id="preloader"></div>
     <div class="login">
         <h1 class="login-sign">Login</h1>
-        <form action="{{ url_for('login') }}" class="login-content" method="post"> <!-- If person is succesfull redirect to login -->
+        <form action="{{ url_for('login') }}" class="login-content" method="post"> <!-- if person is succesfull redirect to login -->
             <div class="users-link"> <!-- form action -->
                 <label for="username"></label>
                 <input class="spacing" type="text" name="username" placeholder="Username" id="username" required> <!-- requried to enter value -->
                 <label for="password" class="password-login"></label>
-                <input class="spacing" type="password" name="password" placeholder="Password" id="password" required> <!-- requried to enter value -->
+                <input class="spacing" type="password" name="password" placeholder="Password" id="password" required> 
                 <input class="login-button" type="submit" value="Login">
             </div>
-            <div id="error" style="color: red; font-weight: bold; margin: 10px;" > <!--Display an error message if wrong input -->
+            <div id="error" style="color: red; font-weight: bold; margin: 10px;" > <!--display an error message if wrong input -->
                 {{ message }}
             </div>
         </form>
         <div class="link">
-            <h2 class="signup-page"> Don't Have an Account? <a href="{{ url_for('signup') }}" class="signup-link">SIGNUP</a></h2> <!-- Rederict to diffrent page -->
+            <h2 class="signup-page"> Don't Have an Account? <a href="{{ url_for('signup') }}" class="signup-link">SIGNUP</a></h2> <!-- rederict to diffrent page -->
         </div>
     </div>
 </body>

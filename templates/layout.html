@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
-    <link rel="stylesheet" href="/static/index.css">  <!-- Diffrent linked sources -->
+    <link rel="stylesheet" href="/static/index.css">  <!-- diffrent linked sources -->
     <link rel="preconnect" href="https://fonts.googleapis.com"> 
     <link rel="stylesheet" href="/index.js"> 
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,7 +12,7 @@
 </head>
 <body>
   <header>
-    <!-- Logo linking to the home page -->
+    <!-- logo linking to the home page -->
     <a href="/surfboard"><img src="/static/pictures/surflogo.png" class="logo"></a>
     
     <nav>
@@ -22,7 +22,7 @@
               <li><a href="/logout">EXIT</a></li>
       </ul>
   </nav>
-    <!-- Cart icon -->
+    <!-- cart icon -->
     <div class="icon-cart">
             <a href="/checkout"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" viewBox="0 0 24 24">
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312"/>
@@ -35,7 +35,7 @@
         
         {%block content%} {%endblock%} 
     </main>
-
+    <!-- makes it possible for the messages to display -->
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
       <div class="alert-container">
@@ -51,14 +51,14 @@
     <footer class="footer">
         <div class="footer-cont">
             <div class="footer-nav">
-                <ul class="footer-links"> <!-- Footer navigation links -->
+                <ul class="footer-links"> <!-- footer navigation links -->
                     <li><a href="/surfboard">Home</a></li>
                     <li><a href="/surfboard">Products</a></li>
                     <li><a href="/brands">Brands</a></li>
                 </ul>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2024 Made By Daniel Streletsky</p> <!-- Footer copyright -->
+                <p>&copy; 2024 Made By Daniel Streletsky</p> <!-- footer copyright -->
             </div>
         </div>
     </footer>

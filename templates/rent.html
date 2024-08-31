@@ -1,0 +1,26 @@
+{% extends 'layout.html' %} <!-- extends the layout page -->
+{% block content %}
+
+<h1 class="top-screen">Rent</h1>
+<div class="product-list">
+    {% for surfboard in surfboards %} 
+    <div class="item">
+        {% if surfboard[5] %} <!-- if the surfboard has an image (in the 5th column of the database) -->
+        <img src="{{ surfboard[5] }}" class="item-picture" alt="{{ surfboard[1] }}"> <!-- display the surfboard image -->
+        {% endif %}
+        <div class="surfboard-name">
+        <h2>{{ surfboard[1] }}</h2> <!-- display the surfboard name -->
+        <div class="price">${{ surfboard[4] }}</div> <!-- display the surfboard's price -->
+        <h3>{{ surfboard[3] }}</h3> <!-- display the surfboard's condition -->
+        <h4>{{ surfboard[2] }}</h4> <!-- display the surfboard's type or length -->
+    </div>
+    <form action="{{ url_for('confirm_rental', surfboard_id=surfboard[0]) }}" method="post"> <!-- url for the rental in routes -->
+        <label for="rent-date" class="rent-date">Rental Date:</label> <!-- rental label for a calander -->
+        <input type="date" name="rental_date" required> 
+        <button type="submit" class="rent-button">Rent</button> <!-- rent button  -->
+    </form>
+    </div>
+    {% endfor %} <!-- end of the loop through surfboards -->
+</div>
+
+{% endblock %}

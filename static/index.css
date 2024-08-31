@@ -232,3 +232,48 @@ main {
     transition: all 1s ease 0.2s;
     opacity: 1;
 }
+
+
+.rent-button{
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    background-color: #44a1a0;
+    color: black;
+    padding: 10px;
+    margin: 7px;
+    padding-left: 20px;
+    padding-right: 20px;
+    transition: all 0.6s ease 0s;
+}
+
+
+.rent-button:hover{
+    color: white;
+    transition: all 0.6s ease 0s;
+    transform: scaleY(0.9);
+    background-color: black;
+}
+
+
+.rent-date{
+    font-family: anton;
+}
+
+
+.alert-container{
+    position: absolute;
+    align-items: center;
+    top: 120px;
+    left: 0;
+    z-index: 1000;
+
+}
+
+
+.alert{
+    font-family: anton;
+    text-align: center;
+
+}
+

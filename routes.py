@@ -27,10 +27,7 @@ def login():
             session['loggedin'] = True
             session['user_id'] = user[0]
             session['username'] = user[1] # makes the user in session
-            session['cart'] = []  
-            next_page = request.args.get('next')
-            if next_page:
-                return redirect(next_page) #takes them to the surfboards page
+            session['cart'] = []   #takes them to the surfboards page
             return redirect(url_for('surfboards'))
         else:
             msg = 'Invalid username or password' # displays message if wrong
@@ -193,6 +190,36 @@ def add_to_cart(surfboard_id):
 @app.route('/lobby') #lobbys screen
 def lobby():
     return render_template("lobby.html")
+
+
+@app.route('/rent')
+def rent():
+    conn = sqlite3.connect("SurfBoards.db")
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM SurfBoards")
+    surfboards = cur.fetchall()
+    conn.close()
+    return render_template("rent.html", surfboards=surfboards)
+
+
+
+@app.route('/confirm_rental/<int:surfboard_id>', methods=['POST'])
+def confirm_rental(surfboard_id):
+    rental_date = request.form['rental_date']
+    conn = sqlite3.connect("SurfBoards.db")
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT INTO Rentals (user_id, surfboard_name, rental_date) VALUES (?, ?, ?)",
+        (None, surfboard_id, rental_date)
+    )
+    conn.commit()
+    conn.close()
+
+    flash(f'Thank you for renting please be at Summer Beach on {rental_date}.')
+    flash('Please exit if done')
+    return redirect(url_for('rent'))
+
+
 
 
 if __name__ == "__main__":

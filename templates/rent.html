@@ -1,5 +1,6 @@
 {% extends 'layout.html' %} <!-- extends the layout page -->
 {% block content %}
+<link rel="stylesheet" href="/static/cart.css">
 
 <h1 class="top-screen">Rent</h1>
 <div class="product-list">
@@ -10,14 +11,17 @@
         {% endif %}
         <div class="surfboard-name">
         <h2>{{ surfboard[1] }}</h2> <!-- display the surfboard name -->
-        <div class="price">${{ surfboard[4] }}</div> <!-- display the surfboard's price -->
-        <h3>{{ surfboard[3] }}</h3> <!-- display the surfboard's condition -->
+        <div class="price">${{ surfboard[7] }}</div>
         <h4>{{ surfboard[2] }}</h4> <!-- display the surfboard's type or length -->
     </div>
+    {% if session.loggedin %}
     <form action="{{ url_for('confirm_rental', surfboard_id=surfboard[0]) }}" method="post"> <!-- url for the rental in routes -->
         <label for="rent-date" class="rent-date">Rental Date:</label> <!-- rental label for a calander -->
-        <input type="date" name="rental_date" required> 
-        <button type="submit" class="rent-button">Rent</button> <!-- rent button  -->
+        <input type="date" name="rental_date" required min="{{ today_date }}"> 
+        <button type="submit" class="rent-button">Rent</button> 
+        {% else %}  <!-- else if its not display print login -->
+        <a href="{{ url_for('login') }}" class="login-btn">Login To Rent</a>  <!-- button-->
+        {% endif %}
     </form>
     </div>
     {% endfor %} <!-- end of the loop through surfboards -->

@@ -267,6 +267,7 @@ main {
     top: 120px;
     left: 0;
     z-index: 1000;
+    margin-left: 10px;
 
 }
 
@@ -274,6 +275,7 @@ main {
 .alert{
     font-family: anton;
     text-align: center;
+    margin-left: 10px;
 
 }
 

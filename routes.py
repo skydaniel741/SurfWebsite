@@ -1,142 +1,149 @@
-from flask import Flask, render_template, redirect, url_for, request, session, flash #import all of the important features
+from flask import (
+    Flask,
+    render_template,
+    redirect,
+    url_for,
+    request,
+    session,
+    flash,
+    abort
+)
 import sqlite3
 import re
-from functools import wraps
-from datetime import datetime
+from datetime import date
+from werkzeug.security import generate_password_hash, check_password_hash
+
 
 app = Flask(__name__)
 app.secret_key = 'secretkey'
 
-def get_db_connection():  #connects the database with the program
+
+# Connetion to database
+def get_db_connection():
     conn = sqlite3.connect('SurfBoards.db')
     conn.row_factory = sqlite3.Row
     return conn
 
-@app.route('/login', methods=['GET', 'POST']) #login route section
+
+@app.route('/')  # Staring screen
+def layout():
+    return render_template("lobby.html")
+
+
+@app.route('/lobby')  # lobbys screen
+def lobby():
+    return render_template("lobby.html")
+
+
+@app.errorhandler(404)  # Error Handler
+def page_not_found(e):
+    return render_template('404.html')
+
+
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     msg = ''
-    if request.method == 'POST':          # connects the database with the program to select everthing from users
+# the route to connect the database
+    if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         conn = sqlite3.connect("SurfBoards.db")
+        conn.row_factory = sqlite3.Row
         cur = conn.cursor()
-        cur.execute("SELECT * FROM Users WHERE username = ? and password = ?", (username, password))
+        cur.execute("SELECT * FROM Users WHERE username = ?", (username,))
         user = cur.fetchone()
         conn.close()
-        if user: # if the users log in details are correct 
-            session['loggedin'] = True
-            session['user_id'] = user[0]
-            session['username'] = user[1] # makes the user in session
-            session['cart'] = []   #takes them to the surfboards page
+        if user and check_password_hash(user['password'], password):
+            #  Making the users be able to loggin with sessions
+            session['loggedin'] = True  # If user in database
+            session['user_id'] = user['user_id']
+            session['username'] = user['username']
+            session['cart'] = []
             return redirect(url_for('surfboards'))
-        else:
-            msg = 'Invalid username or password' # displays message if wrong
+        else:  # Make the user able to access
+            msg = 'Invalid username or password'
     return render_template("login.html", message=msg)
 
 
-
-@app.route("/logout") # route for logging out the user 
-def logout():
-    session.clear() # clears the persons session 
-    return redirect(url_for("lobby"))
-
-
+# Signup section
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     msg = ''
-    if request.method == 'POST': # gets the method to post so featching the data 
+    if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        if not re.match(r'^[A-Za-z0-9]+$', username): # displays the message if not matched with the right indentaion
-            msg = 'Only can Have letters and numbers' #displays the message 
+        # Making perameters if the persons dosent pass credinatials
+        if not re.match(r'^[A-Za-z0-9]+$', username):
+            msg = 'Only can have letters and numbers'
         elif not re.match(r'^[A-Za-z0-9]+$', password):
             msg = 'Only can have letters and numbers'
+        elif len(password) >= 9:
+            msg = 'Password must be shorter than 8 characters'
+        elif len(username) >= 9:
+            msg = 'Username must be shorter than 8 characters'
         else:
-            conn = sqlite3.connect("SurfBoards.db") # connects the databse with the program 
+            # If the user Exsits
+            conn = sqlite3.connect("SurfBoards.db")
             cur = conn.cursor()
-            cur.execute("SELECT * FROM Users WHERE username = ?", (username,)) # selects everything from user 
+            cur.execute("SELECT * FROM Users WHERE username = ?", (username,))
             user = cur.fetchone()
             if user:
-                msg = 'Username already exists' #displays message 
-            else:
-                cur.execute("INSERT INTO Users (username, password) VALUES (?, ?)", (username, password)) #inserts values into the database into users table 
-                conn.commit()
-                msg = 'Account Created' 
+                msg = 'Username already exists'
+            else:  # Make the New user get inserted into the database
+                # Protecting user password
+                hashed_password = generate_password_hash(password)
+            cur.execute(
+                        "INSERT INTO Users (username, password) VALUES (?, ?)",
+                        (username, hashed_password))
+            conn.commit()
+            msg = 'Account Created'
             conn.close()
     return render_template("signup.html", message=msg)
 
 
-@app.route('/')
-def layout(): # starting screen to display lobby 
-    return render_template("lobby.html")
+# Logout Section
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("lobby"))
 
 
-@app.route('/surfboard') 
+# Surfboard section
+@app.route('/surfboard')
 def surfboards():
-    conn = sqlite3.connect("SurfBoards.db") # connects the database with program
+    conn = sqlite3.connect("SurfBoards.db")
     cur = conn.cursor()
-    cur.execute("SELECT * FROM SurfBoards") #gets everthing from surfboards
+    cur.execute("SELECT * FROM SurfBoards")  # gets everthing from surfboards
     surfboards = cur.fetchall()
-    conn.close() #closes the connection
+    conn.close()  # closes the connection
     return render_template("surfboards.html", surfboards=surfboards)
 
 
-@app.route('/checkout', methods=['GET', 'POST']) # gets and post data from database 
-def checkout():
+# Adds the surfboard to the add to cart section
+@app.route('/<int:surfboard_id>/add_to_cart', methods=["POST", "GET"])
+def add_to_cart(surfboard_id):
     conn = get_db_connection()
     cur = conn.cursor()
-    cart_items = session.get('cart', []) # for person in sessions make cart items 
-    surfboards = []
-    final_total = 0 # final total to equal to zero
-
-    for item in cart_items:
-        cur.execute("SELECT * FROM SurfBoards WHERE surfboard_id = ?", (item['surfboard_id'],)) # selects everthing from surfboards with item = surfboard_id
-        surfboard = cur.fetchone()
-        if surfboard:
-            surfboard_dict = { # surfboard dictonary from database to make it easir 
-                'surfboard_id': surfboard['surfboard_id'],
-                'name': surfboard['surfboard_name'],
-                'type': surfboard['surfboard_type'],
-                'condition': surfboard['surfboard_condtion'],
-                'price': surfboard['purchase_price'],
-                'image': surfboard['surfboard_photo'],
-                'quantity': item['quantity']
-            }
-            final_total += surfboard['purchase_price'] * item['quantity'] # final total will be purchase price multipled the item quanity 
-            surfboards.append(surfboard_dict) # end the dictonary by making single line
-
+    cur.execute("SELECT * FROM SurfBoards WHERE surfboard_id = ?",
+                (surfboard_id,))
+    surfboard = cur.fetchone()
     conn.close()
-
-    return render_template('checkout.html', cart=surfboards,  
-                           final_total=final_total)
-
-
-@app.route('/<int:surfboard_id>/remove_from_cart', methods=['POST']) # removes from cart but still holding the id value
-def remove_from_cart(surfboard_id):
-    cart_items = session.get('cart', []) # sessions gets from the users 
-    cart_items = [item for item in cart_items 
-        if item['surfboard_id'] != surfboard_id] # for items in cart if item
+    if surfboard is None:
+        abort(404)
+    cart_items = session.get('cart', [])  # Personal cart items get
+    item_in_cart = next(
+        (item for item in cart_items if item
+         ['surfboard_id'] == surfboard_id), None)
+    if item_in_cart:
+        item_in_cart['quantity'] += 1 # Adds the quantity
+    else:
+        cart_items.append({'surfboard_id': surfboard_id, 'quantity': 1})
     session['cart'] = cart_items
-    return redirect(url_for('checkout')) #redirect to checkout with the removal 
+    return redirect(url_for('cart'))
 
 
-@app.route('/surfboards/brand/<brand_name>') # fliter the brand name with the surfboards
-def surfboards_by_brand(brand_name):
-    conn = sqlite3.connect("SurfBoards.db")
-    cur = conn.cursor()
-    cur.execute(
-        "SELECT * FROM SurfBoards WHERE surfboard_name LIKE ?", # selects everything from the surboard table where surfboard names
-        ('%' + brand_name + '%',)
-    )
-    surfboards = cur.fetchall()
-    conn.close()
-    return render_template( #returns the surfboards .html 
-        "surfboards.html",
-        surfboards=surfboards,
-        brand_name=brand_name
-    )
-
-
+# Brands section
 @app.route('/brands')
 def brands():
     conn = sqlite3.connect("SurfBoards.db")
@@ -147,51 +154,140 @@ def brands():
     return render_template("brands.html", brands=brands)
 
 
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('404.html')
+# Sorting the product by brand name
+@app.route('/surfboards/brand/<brand_name>')
+def surfboards_by_brand(brand_name):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM SurfBoards WHERE surfboard_name LIKE ?",
+                ('%' + brand_name + '%',))
+    surfboards = cur.fetchall()
+    conn.close()
+    if not surfboards:
+        abort(404)
+    return render_template(
+            "surfboards.html",
+            surfboards=surfboards,
+            brand_name=brand_name)
 
 
-@app.route('/purchase_products', methods=['POST']) #purschase prodcut in the cart section
+# Cart section
+@app.route('/cart', methods=['GET', 'POST'])
+def cart():
+    conn = get_db_connection()  # Connection to database
+    cur = conn.cursor()
+    cart_items = session.get('cart', [])
+    surfboards = []
+    final_total = 0
+
+    for item in cart_items:
+        cur.execute("SELECT * FROM SurfBoards WHERE surfboard_id = ?",
+                    (item['surfboard_id'],))
+        surfboard = cur.fetchone()
+        if surfboard:
+            surfboard_dict = { # Same dictonary below
+                'surfboard_id': surfboard['surfboard_id'],
+                'name': surfboard['surfboard_name'],
+                'type': surfboard['surfboard_type'],
+                'condition': surfboard['surfboard_condtion'],
+                'price': surfboard['purchase_price'],
+                'image': surfboard['surfboard_photo'],
+                'quantity': item['quantity']
+            }
+            final_total += surfboard['purchase_price'] * item['quantity']
+            surfboards.append(surfboard_dict)
+    conn.close()
+    return render_template(
+            'cart.html',
+            cart=surfboards,
+            final_total=final_total)
+
+
+# Remove product from cart
+@app.route('/<int:surfboard_id>/remove_from_cart', methods=['POST'])
+def remove_from_cart(surfboard_id):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM SurfBoards WHERE surfboard_id = ?",
+                (surfboard_id,))
+    surfboard = cur.fetchone()
+    conn.close()
+    if surfboard is None:
+        abort(404)
+    cart_items = session.get('cart', [])
+    cart_items = [item for item in cart_items if item  # Removes item from cart
+                  ['surfboard_id'] != surfboard_id]
+    session['cart'] = cart_items
+    return redirect(url_for('cart'))
+
+
+# Checkout section
+@app.route('/checkout', methods=['GET', 'POST'])
+def checkout():
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cart_items = session.get('cart', [])
+    surfboards = []
+    final_total = 0
+    if not cart_items:  # If nothing in checkout abort
+        abort(404)
+
+    for item in cart_items:
+        cur.execute("SELECT * FROM SurfBoards WHERE surfboard_id = ?",
+                    (item['surfboard_id'],))
+        surfboard = cur.fetchone()
+        if surfboard:
+            surfboard_dict = {  # Creating dictonary to display in checkout
+                'surfboard_id': surfboard['surfboard_id'],
+                'name': surfboard['surfboard_name'],
+                'type': surfboard['surfboard_type'],
+                'condition': surfboard['surfboard_condtion'],
+                'price': surfboard['purchase_price'],
+                'image': surfboard['surfboard_photo'],
+                'quantity': item['quantity'],
+                'total': surfboard['purchase_price'] * item['quantity']
+            }
+            final_total += surfboard['purchase_price'] * item['quantity']
+            surfboards.append(surfboard_dict)  # Multiple the price by quantity
+
+    conn.close()
+    return render_template('checkout.html', purchased_items=surfboards,
+                           final_total=final_total)
+
+
+@app.route('/purchase_products', methods=['POST'])
 def purchase_products():
-    cart_items = session.get('cart', [])  #gets the users cart sessions
+    cart_items = session.get('cart', [])
+
     conn = get_db_connection()
     cur = conn.cursor()
     user_id = session.get('user_id', None)
-    for item in cart_items:
-        cur.execute("SELECT surfboard_name, purchase_price FROM SurfBoards WHERE surfboard_id = ?", # selects surfboard name etc from the surboards table   
-                     (item['surfboard_id'],))
+    for item in cart_items:  # If the item in cart
+        cur.execute(  # Select certian obejects
+                    "SELECT surfboard_name, purchase_price "
+                    "FROM SurfBoards "
+                    "WHERE surfboard_id = ?",
+                    (item['surfboard_id'],))
         surfboard = cur.fetchone()
         if surfboard:
-            surfboard_name = surfboard['surfboard_name'] # making it able to store them in the database
+            surfboard_name = surfboard['surfboard_name']
             purchase_price = surfboard['purchase_price']
-            if user_id:
-                cur.execute #excutes the command
-    ("INSERT INTO Checkout (user_id, surfboard_id, surfboard_name, purchase_price) VALUES (?, ?, ?, ?)",  #inserts the the id etc into the checkout with on what the user valued 
-     (user_id, item['surfboard_id'], surfboard_name, purchase_price))
+            cur.execute( # If the surfboards is purchased Insert
+                "INSERT INTO Checkout "
+                "(user_id, surfboard_id, surfboard_name, purchase_price) "
+                "VALUES (?, ?, ?, ?)",
+                (user_id, item['surfboard_id'],
+                 surfboard_name, purchase_price))
     conn.commit()
     conn.close()
-    session['cart'] = []  # makes the session disaper with the cart empty 
-    flash('Thank you for your purchase!') #flashes the message 
-    flash('Please come to the nearest workshop for payment')
-    return redirect(url_for('checkout'))
-    
-@app.route('/<int:surfboard_id>/add_to_cart', methods=["POST", "GET"]) # function fro adding to cart with surfbaord value 
-def add_to_cart(surfboard_id):
-    cart_items = session.get('cart', []) 
-    item_in_cart = next((item for item in cart_items if item['surfboard_id'] == surfboard_id), None)
-    if item_in_cart:
-        item_in_cart['quantity'] += 1 # adds the item to cart with a count to go up by one in the quantity 
-    else:
-        cart_items.append({'surfboard_id': surfboard_id, 'quantity': 1}) #updateds it in teh cart items
-    session['cart'] = cart_items  
-    return redirect(url_for('checkout')) 
 
-@app.route('/lobby') #lobbys screen
-def lobby():
-    return render_template("lobby.html")
+    # Clear the cart
+    session['cart'] = []
+    flash('Thankyou please logout if your done')
+    return redirect(url_for('cart'))
 
 
+# Rental section
 @app.route('/rent')
 def rent():
     conn = sqlite3.connect("SurfBoards.db")
@@ -199,27 +295,39 @@ def rent():
     cur.execute("SELECT * FROM SurfBoards")
     surfboards = cur.fetchall()
     conn.close()
-    return render_template("rent.html", surfboards=surfboards)
+    # Chatgpt code for the date time
+    today_date = date.today().isoformat()  # to procces the date today
+    return render_template(
+        "rent.html",
+        surfboards=surfboards,
+        today_date=today_date)
 
 
-
+# Confirms to add the rental
 @app.route('/confirm_rental/<int:surfboard_id>', methods=['POST'])
 def confirm_rental(surfboard_id):
     rental_date = request.form['rental_date']
-    conn = sqlite3.connect("SurfBoards.db")
+    conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute(
-        "INSERT INTO Rentals (user_id, surfboard_name, rental_date) VALUES (?, ?, ?)",
-        (None, surfboard_id, rental_date)
-    )
+    cur.execute("SELECT * FROM SurfBoards WHERE surfboard_id = ?",
+                (surfboard_id,))
+    surfboard = cur.fetchone()
+    # If nothing
+    if surfboard is None:
+        conn.close()
+        abort(404)
+
+    cur.execute(  # Adds the product to rental
+        "INSERT INTO Rentals "
+        "(user_id, surfboard_name, rental_date) "
+        "VALUES (?, ?, ?)",
+        (None, surfboard['surfboard_name'], rental_date))
     conn.commit()
     conn.close()
 
-    flash(f'Thank you for renting please be at Summer Beach on {rental_date}.')
-    flash('Please exit if done')
+    flash(f'Thank you for renting! Please be at Summer Beach on {rental_date}.')
+    flash('Please logout if done')  # Displaying the message
     return redirect(url_for('rent'))
-
-
 
 
 if __name__ == "__main__":

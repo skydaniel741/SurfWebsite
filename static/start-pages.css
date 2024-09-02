@@ -78,7 +78,7 @@ input{
     color: #0d5c63;
     transition: all 1s ease 0.2s;
     border: 2px solid;
-    transform: translateY(-10px);
+    transform: translateY(-8px);
 
 }
 
@@ -105,7 +105,7 @@ input{
 }
 
 .body-signup{
-    background-image: url('/static/pictures/pexels-yaroslav-shuraev-1553959\ \(1\).jpg');
+    background-image: url('/static/pictures/pexels-earano-1298684.jpg');
    background-repeat: no-repeat;
    background-size: cover;
     margin: 0px;

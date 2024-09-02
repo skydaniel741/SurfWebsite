@@ -71,12 +71,11 @@
 
 .login-btn {
     cursor: pointer;
-    border-radius: 20px;
-    width: 200px;
+    border-radius: 10px;
     border: none;
     background-color: #44a1a0;
-    padding: 5px;
-    margin-top: 10px;}
+    padding: 2px;
+    margin-top: 20px;}
 
 .alert-container{
     text-align: center;
@@ -84,4 +83,42 @@
     background-color: white;
     margin-bottom: 100px;
 
+}
+
+.final-pur{
+    font-family: anton;
+    text-align: center;
+}
+
+
+.product-detail{
+    color: black;
+    word-spacing: 1px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.final-btn{
+    cursor: pointer;
+    border-radius: 20px;
+    width: 200px;
+    border: none;
+    background-color: #44a1a0;
+    padding: 5px;
+    left: 200px;
+    right: 200px;
+}
+
+.body-final-btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.location{
+    font-family: anton;
+    letter-spacing: 1px;
+    text-align: center;
+    align-items: center;
 }

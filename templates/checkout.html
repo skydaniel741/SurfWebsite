@@ -7,9 +7,9 @@
     <h2>Purchase Items</h2>
     <ul>
         {% for item in purchased_items %}
-            <div class="product-detail">
+            <div class="product-detail"> <!-- for items pruchesed display -->
             <h3>{{ item.name }}</h3>
-            <p>Quantity: {{ item.quantity }}</p>
+            <p>Quantity: {{ item.quantity }}</p> <!-- Doing the cal -->
             <p>Price per Item: ${{ item.price }}</p>
             </div>
         {% endfor %}
@@ -17,18 +17,18 @@
 </div>
 <div class="body-final-btn"> 
 <form action="{{ url_for('purchase_products') }}" method="post">
-    <button type="submit" class="final-btn">Buy</button>
+    <button type="submit" class="final-btn">Buy</button> <!-- When clicked button redirect to purchase product -->
 </form>
 </div>
 
 <div class="total-body">
-    <h5 class="card-title">Total</h5>
+    <h5 class="card-title">Total</h5> <!-- Prodcut total-->
     <p class="card-text">${{ final_total | round(2) }}</p>
 </div>
 <div class="location">
 <h4>Last Step</h4>
-<h5>When brought please come to the nearest store for purchase</h5>
-<p><iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3437.8125919629556!2d172.76017635325047!3d-43.568127673532366!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2snz!4v1725258464587!5m2!1sen!2snz" width="400" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></p>
+<h5>When bought please come to the nearest store for purchase!</h5> <!-- url for the maps image -->
+<p><iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3437.8125919629556!2d172.76017635325047!3d-43.568127673532366!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2snz!4v1725258464587!5m2!1sen!2snz" width="700" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></p>
 </div>
 
 {% endblock %}

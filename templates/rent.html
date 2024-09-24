@@ -14,14 +14,15 @@
         <div class="price">${{ surfboard[7] }}</div>
         <h4>{{ surfboard[2] }}</h4> <!-- display the surfboard's type or length -->
     </div>
-    {% if session.loggedin %}
-    <form action="{{ url_for('confirm_rental', surfboard_id=surfboard[0]) }}" method="post"> <!-- url for the rental in routes -->
-        <label for="rent-date" class="rent-date">Rental Date:</label> <!-- rental label for a calander -->
-        <input type="date" name="rental_date" required min="{{ today_date }}"> 
-        <button type="submit" class="rent-button">Rent</button> 
-        {% else %}  <!-- else if its not display print login -->
-        <a href="{{ url_for('login') }}" class="login-btn">Login To Rent</a>  <!-- button-->
-        {% endif %}
+    {% if session.get('user_id') %}
+    <form action="{{ url_for('confirm_rental', surfboard_id=surfboard[0]) }}" method="post">
+        <label for="rent-date" class="rent-date">Rental Date:</label>
+        <input type="date" name="rental_date" required min="{{ today_date }}" max="{{ max_rental_date }}">
+        <button type="submit" class="rent-button">Rent</button>
+    </form>
+    {% else %}
+    <a href="{{ url_for('login') }}" class="login-btn">LOGIN TO RENT</a>
+    {% endif %}
     </form>
     </div>
     {% endfor %} <!-- end of the loop through surfboards -->

@@ -15,11 +15,11 @@
                 <label for="username"></label>
                 <input type="text" placeholder="Username" name="username" id="username" required class="spacing"> <!--required an input -->
                 <label for="password"></label>
-                <input type="text" placeholder="Password" name="password" id="password" required class="spacing"> <!-- input required -->
-                <input type="submit" value="Signup" class="login-button"> <!-- button for login -->
+                <input type="text" placeholder="Password" name="password" id="password" required class="spacing"> 
+                <input type="submit" value="Signup" class="login-button">
             </div>
-        </form>
-        <div id="error" style="color: red; font-weight: bold; margin: -10px; font-family: sans-serif;" > <!-- dislpay an error message if an error occured -->
+        </form> <!-- error message-->
+        <div id="error" style="color: red; font-weight: bold; margin: -10px; font-family: sans-serif;" > 
             {{ message }}
         </div>
         <div>

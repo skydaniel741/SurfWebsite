@@ -47,6 +47,11 @@
     font-size: 15px;
 }
 
+.checkout-btn-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;}
+
 .remove-btn{
     cursor: pointer;
     border-radius: 20px;
@@ -121,4 +126,5 @@
     letter-spacing: 1px;
     text-align: center;
     align-items: center;
+    font-weight: 400;
 }

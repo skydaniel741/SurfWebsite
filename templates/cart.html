@@ -14,25 +14,19 @@
                 <li class="list-group-item">Quantity: {{ item.quantity }}</li> 
                 <li class="list-group-item">Price ${{ item.price * item.quantity }}</li>  <!-- the price times the number of same product -->
             </ul>
-        </div>
-        <div class="card-body">
             <form id="remove_from_cart_form_{{ item.surfboard_id }}" action="{{ url_for('remove_from_cart', surfboard_id=item.surfboard_id) }}" method="post">
                 <button type="submit" class="remove-btn" form="remove_from_cart_form_{{ item.surfboard_id }}">Remove</button>
-            </form>
-        </div>
-        <div class="body-buy-btn"> 
-            <form action="{{ url_for('checkout') }}" method="post">
-                <button type="submit" class="buy-btn">Checkout</button>
             </form>
         </div>
     </div>
     {% endfor %}
 </div>
-
-<div class="total-body">  <!-- final totla  -->
-    {% if not cart %}  <!--when nothing is in cart print message -->
-    <p>Nothing to see here</p>
-    {% endif %}
+{% if cart %}
+<div class="checkout-btn-container">
+    <form action="{{ url_for('checkout') }}" method="post">
+        <button type="submit" class="buy-btn">Checkout</button>
+    </form>
 </div>
+{% endif %}
 
 {% endblock %}

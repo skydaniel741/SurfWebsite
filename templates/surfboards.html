@@ -6,7 +6,7 @@
     {% for surfboard in surfboards %} <!-- loop through the filtered surfboards -->
     <div class="item">
         {% if surfboard[5] %} <!-- if the surfboard has an image (in the 5th column of the database) -->
-        <img src="{{ surfboard[5] }}" class="item-picture" alt="{{ surfboard[1] }}"> <!-- display the surfboard image -->
+        <img src="{{ surfboard[5] }}" class="item-picture" alt="{{ surfboard[1] }}"> 
         {% endif %}
         <div class="surfboard-name">
         <h2>{{ surfboard[1] }}</h2> <!-- display the surfboard name -->
@@ -15,10 +15,10 @@
         <h4>{{ surfboard[2] }}</h4> <!-- display the surfboard's type or length -->
     </div>
         <form action="{{ url_for('add_to_cart', surfboard_id=surfboard[0]) }}" method="post"> <!-- form to add the surfboard to the cart -->
-            <button type="submit" class="add-cart">Add To Cart</button> <!-- add to cart button -->
+            <button type="submit" class="add-cart">ADD TO CART</button> 
         </form>
     </div>
-    {% endfor %} <!-- end of the loop through surfboards -->
+    {% endfor %} 
 </div>
 
 {% endblock %}

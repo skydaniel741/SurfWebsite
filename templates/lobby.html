@@ -12,7 +12,7 @@
     <h1 id="date-time" class="centerd">12:15</h1> 
     <div class="redirect-footer">
         <ul class="redirect-links"> <!-- navagation Links -->
-            <li><a href="/login">Login</a></li> <!-- redirect to login -->
+            <li><a href="/login">Login/Sign Up</a></li> <!-- redirect to login -->
             <li><a href="/surfboard">View Products</a></li>
         </ul>
     </div>
@@ -25,7 +25,7 @@ setTime();
 function setTime() {
     var dt = new Date(); 
     var time = dt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    var dateTimeElement = document.getElementById('date-time');
+    var dateTimeElement = document.getElementById('date-time'); //gets the clock from ip
     if (dateTimeElement) {
         dateTimeElement.innerHTML = time;
     } else {

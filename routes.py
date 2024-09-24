@@ -40,6 +40,17 @@ def page_not_found(e):
     return render_template('404.html')
 
 
+# had to get it from chat gpt
+def execute_query(query, args=()):
+    conn = sqlite3.connect('SurfBoards.db')
+    cursor = conn.cursor()
+    cursor.execute(query, args)
+    conn.commit()
+    results = cursor.fetchall()
+    conn.close()
+    return results
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     msg = ''
@@ -55,7 +66,7 @@ def login():
         conn.close()
         if user and check_password_hash(user['password'], password):
             #  Making the users be able to loggin with sessions
-            session['loggedin'] = True  # If user in database
+            session['loggedin'] = True
             session['user_id'] = user['user_id']
             session['username'] = user['username']
             session['cart'] = []
@@ -65,44 +76,49 @@ def login():
     return render_template("login.html", message=msg)
 
 
-# Signup section
+#  Signup section
+
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     msg = ''
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        # Making perameters if the persons dosent pass credinatials
+
+        # Input validation
         if not re.match(r'^[A-Za-z0-9]+$', username):
-            msg = 'Only can have letters and numbers'
+            msg = 'Username only contain letters and numbers'
         elif not re.match(r'^[A-Za-z0-9]+$', password):
-            msg = 'Only can have letters and numbers'
-        elif len(password) >= 9:
-            msg = 'Password must be shorter than 8 characters'
-        elif len(username) >= 9:
-            msg = 'Username must be shorter than 8 characters'
+            msg = 'Password only contain letters and numbers'
+        elif len(password) >= 11:
+            msg = 'Password must be shorter than 10 characters'
+        elif len(username) >= 11:
+            msg = 'Username must be shorter than 10 characters'
+        elif len(password) <= 3:
+            msg = 'Password must be longer than 3 characters'
+        elif len(username) <= 3:
+            msg = 'Username must be longer than 3 characters'
         else:
-            # If the user Exsits
+            # Check if the user already exists
             conn = sqlite3.connect("SurfBoards.db")
             cur = conn.cursor()
             cur.execute("SELECT * FROM Users WHERE username = ?", (username,))
             user = cur.fetchone()
             if user:
                 msg = 'Username already exists'
-            else:  # Make the New user get inserted into the database
-                # Protecting user password
+            else:
                 hashed_password = generate_password_hash(password)
-            cur.execute(
-                        "INSERT INTO Users (username, password) VALUES (?, ?)",
-                        (username, hashed_password))
-            conn.commit()
-            msg = 'Account Created'
+                cur.execute(
+                    "INSERT INTO Users (username, password) VALUES (?, ?)",
+                    (username, hashed_password))
+                conn.commit()
+                msg = 'Account created successfully'
             conn.close()
+
     return render_template("signup.html", message=msg)
 
 
 # Logout Section
-
 @app.route("/logout")
 def logout():
     session.clear()
@@ -112,23 +128,16 @@ def logout():
 # Surfboard section
 @app.route('/surfboard')
 def surfboards():
-    conn = sqlite3.connect("SurfBoards.db")
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM SurfBoards")  # gets everthing from surfboards
-    surfboards = cur.fetchall()
-    conn.close()  # closes the connection
+    surfboards = execute_query("SELECT * FROM SurfBoards")
     return render_template("surfboards.html", surfboards=surfboards)
 
 
 # Adds the surfboard to the add to cart section
 @app.route('/<int:surfboard_id>/add_to_cart', methods=["POST", "GET"])
 def add_to_cart(surfboard_id):
-    conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM SurfBoards WHERE surfboard_id = ?",
-                (surfboard_id,))
-    surfboard = cur.fetchone()
-    conn.close()
+    surfboard = execute_query(
+        "SELECT * FROM SurfBoards WHERE surfboard_id = ?",
+        (surfboard_id,))
     if surfboard is None:
         abort(404)
     cart_items = session.get('cart', [])  # Personal cart items get
@@ -136,7 +145,7 @@ def add_to_cart(surfboard_id):
         (item for item in cart_items if item
          ['surfboard_id'] == surfboard_id), None)
     if item_in_cart:
-        item_in_cart['quantity'] += 1 # Adds the quantity
+        item_in_cart['quantity'] += 1  # Adds the quantity
     else:
         cart_items.append({'surfboard_id': surfboard_id, 'quantity': 1})
     session['cart'] = cart_items
@@ -146,23 +155,16 @@ def add_to_cart(surfboard_id):
 # Brands section
 @app.route('/brands')
 def brands():
-    conn = sqlite3.connect("SurfBoards.db")
-    cur = conn.cursor()
-    cur.execute("SELECT *  FROM Brands")
-    brands = cur.fetchall()
-    conn.close()
+    brands = execute_query("SELECT *  FROM Brands")
     return render_template("brands.html", brands=brands)
 
 
 # Sorting the product by brand name
 @app.route('/surfboards/brand/<brand_name>')
 def surfboards_by_brand(brand_name):
-    conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM SurfBoards WHERE surfboard_name LIKE ?",
-                ('%' + brand_name + '%',))
-    surfboards = cur.fetchall()
-    conn.close()
+    surfboards = execute_query(
+        "SELECT * FROM SurfBoards WHERE surfboard_name LIKE ?",
+        ('%' + brand_name + '%',))
     if not surfboards:
         abort(404)
     return render_template(
@@ -185,7 +187,7 @@ def cart():
                     (item['surfboard_id'],))
         surfboard = cur.fetchone()
         if surfboard:
-            surfboard_dict = { # Same dictonary below
+            surfboard_dict = {  # Same dictonary below
                 'surfboard_id': surfboard['surfboard_id'],
                 'name': surfboard['surfboard_name'],
                 'type': surfboard['surfboard_type'],
@@ -206,13 +208,10 @@ def cart():
 # Remove product from cart
 @app.route('/<int:surfboard_id>/remove_from_cart', methods=['POST'])
 def remove_from_cart(surfboard_id):
-    conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM SurfBoards WHERE surfboard_id = ?",
-                (surfboard_id,))
-    surfboard = cur.fetchone()
-    conn.close()
-    if surfboard is None:
+    surfboard = execute_query(
+        "SELECT * FROM SurfBoards WHERE surfboard_id = ?",
+        (surfboard_id,))
+    if surfboard is None:  # abort if nothing
         abort(404)
     cart_items = session.get('cart', [])
     cart_items = [item for item in cart_items if item  # Removes item from cart
@@ -231,7 +230,6 @@ def checkout():
     final_total = 0
     if not cart_items:  # If nothing in checkout abort
         abort(404)
-
     for item in cart_items:
         cur.execute("SELECT * FROM SurfBoards WHERE surfboard_id = ?",
                     (item['surfboard_id'],))
@@ -272,7 +270,7 @@ def purchase_products():
         if surfboard:
             surfboard_name = surfboard['surfboard_name']
             purchase_price = surfboard['purchase_price']
-            cur.execute( # If the surfboards is purchased Insert
+            cur.execute(  # If the surfboards is purchased Insert
                 "INSERT INTO Checkout "
                 "(user_id, surfboard_id, surfboard_name, purchase_price) "
                 "VALUES (?, ?, ?, ?)",
@@ -283,50 +281,50 @@ def purchase_products():
 
     # Clear the cart
     session['cart'] = []
-    flash('Thankyou please logout if your done')
+    flash('Thankyou for your Purchase')
     return redirect(url_for('cart'))
 
 
 # Rental section
 @app.route('/rent')
 def rent():
-    conn = sqlite3.connect("SurfBoards.db")
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM SurfBoards")
-    surfboards = cur.fetchall()
-    conn.close()
+    surfboards = execute_query("SELECT * FROM SurfBoards")
     # Chatgpt code for the date time
     today_date = date.today().isoformat()  # to procces the date today
-    return render_template(
+    max_rental_date = (date.today().replace
+                       (year=date.today().year + 1)).isoformat()
+    return render_template(  # Allows for date to be 1 years
         "rent.html",
         surfboards=surfboards,
-        today_date=today_date)
+        today_date=today_date,
+        max_rental_date=max_rental_date)
 
 
 # Confirms to add the rental
 @app.route('/confirm_rental/<int:surfboard_id>', methods=['POST'])
 def confirm_rental(surfboard_id):
-    rental_date = request.form['rental_date']
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute("SELECT * FROM SurfBoards WHERE surfboard_id = ?",
-                (surfboard_id,))
+    user_id = session.get('user_id')
+    rental_date = request.form['rental_date']
+    cur.execute(
+        "SELECT * FROM SurfBoards WHERE surfboard_id = ?",
+        (surfboard_id,))
     surfboard = cur.fetchone()
     # If nothing
     if surfboard is None:
-        conn.close()
         abort(404)
 
-    cur.execute(  # Adds the product to rental
-        "INSERT INTO Rentals "
-        "(user_id, surfboard_name, rental_date) "
-        "VALUES (?, ?, ?)",
-        (None, surfboard['surfboard_name'], rental_date))
+    cur.execute(  # Adds the product to rental table
+        "INSERT INTO Rentals \
+            (user_id, surfboard_name, rental_date) VALUES (?, ?, ?)",
+        (user_id, surfboard['surfboard_name'], rental_date))
+    session['rental_cart'] = []
     conn.commit()
     conn.close()
 
-    flash(f'Thank you for renting! Please be at Summer Beach on {rental_date}.')
-    flash('Please logout if done')  # Displaying the message
+    flash(f'Thank you for renting! Please be at Sumner Beach on {rental_date}')
+    flash('Please logout if you are done!')  # Displaying the message
     return redirect(url_for('rent'))
 
 

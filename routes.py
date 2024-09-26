@@ -9,7 +9,6 @@ from flask import (
     abort
 )
 import sqlite3
-import re
 from datetime import date
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -38,6 +37,11 @@ def lobby():
 @app.errorhandler(404)  # Error Handler
 def page_not_found(e):
     return render_template('404.html')
+
+
+@app.errorhandler(500)  # Error Handler
+def internal_server_error(e):
+    return render_template('500.html')
 
 
 # had to get it from chat gpt
@@ -86,18 +90,10 @@ def signup():
         password = request.form['password']
 
         # Input validation
-        if not re.match(r'^[A-Za-z0-9]+$', username):
+        if not username.isalnum():
             msg = 'Username only contain letters and numbers'
-        elif not re.match(r'^[A-Za-z0-9]+$', password):
+        elif not password.isalnum():
             msg = 'Password only contain letters and numbers'
-        elif len(password) >= 11:
-            msg = 'Password must be shorter than 10 characters'
-        elif len(username) >= 11:
-            msg = 'Username must be shorter than 10 characters'
-        elif len(password) <= 3:
-            msg = 'Password must be longer than 3 characters'
-        elif len(username) <= 3:
-            msg = 'Username must be longer than 3 characters'
         else:
             # Check if the user already exists
             conn = sqlite3.connect("SurfBoards.db")
@@ -256,32 +252,33 @@ def checkout():
 @app.route('/purchase_products', methods=['POST'])
 def purchase_products():
     cart_items = session.get('cart', [])
-
     conn = get_db_connection()
     cur = conn.cursor()
     user_id = session.get('user_id', None)
-    for item in cart_items:  # If the item in cart
-        cur.execute(  # Select certian obejects
-                    "SELECT surfboard_name, purchase_price "
-                    "FROM SurfBoards "
-                    "WHERE surfboard_id = ?",
-                    (item['surfboard_id'],))
+    for item in cart_items:  # if the item is in the cart
+        cur.execute(
+            "SELECT surfboard_name, purchase_price "
+            "FROM SurfBoards WHERE surfboard_id = ?",
+            (item['surfboard_id'],)
+        )
         surfboard = cur.fetchone()
         if surfboard:
             surfboard_name = surfboard['surfboard_name']
             purchase_price = surfboard['purchase_price']
-            cur.execute(  # If the surfboards is purchased Insert
-                "INSERT INTO Checkout "
-                "(user_id, surfboard_id, surfboard_name, purchase_price) "
-                "VALUES (?, ?, ?, ?)",
-                (user_id, item['surfboard_id'],
-                 surfboard_name, purchase_price))
+            quantity = item['quantity']  # Get the quantity from cart
+            # Insert the purchase details
+            cur.execute(
+                "INSERT INTO Checkout (user_id, surfboard_id, surfboard_name, "
+                "purchase_price, quantity) VALUES (?, ?, ?, ?, ?)",
+                (user_id, item['surfboard_id'], surfboard_name, purchase_price,
+                 quantity)
+            )
     conn.commit()
     conn.close()
 
-    # Clear the cart
+    # Clear the cart after purchase
     session['cart'] = []
-    flash('Thankyou for your Purchase')
+    flash('Thank you for your purchase!')
     return redirect(url_for('cart'))
 
 
@@ -293,14 +290,14 @@ def rent():
     today_date = date.today().isoformat()  # to procces the date today
     max_rental_date = (date.today().replace
                        (year=date.today().year + 1)).isoformat()
-    return render_template(  # Allows for date to be 1 years
+    return render_template(  # allows for date to be 1 years
         "rent.html",
         surfboards=surfboards,
         today_date=today_date,
         max_rental_date=max_rental_date)
 
 
-# Confirms to add the rental
+# confirms to add the rental
 @app.route('/confirm_rental/<int:surfboard_id>', methods=['POST'])
 def confirm_rental(surfboard_id):
     conn = get_db_connection()
@@ -315,16 +312,17 @@ def confirm_rental(surfboard_id):
     if surfboard is None:
         abort(404)
 
-    cur.execute(  # Adds the product to rental table
+    cur.execute(  # adds the product to rental table
         "INSERT INTO Rentals \
             (user_id, surfboard_name, rental_date) VALUES (?, ?, ?)",
         (user_id, surfboard['surfboard_name'], rental_date))
     session['rental_cart'] = []
     conn.commit()
     conn.close()
-
+    # flashing the messages
     flash(f'Thank you for renting! Please be at Sumner Beach on {rental_date}')
-    flash('Please logout if you are done!')  # Displaying the message
+    flash('Please logout if you are done!')  # displaying the message
+    flash('Be at the beach between 10-4 pm to be able to rent')
     return redirect(url_for('rent'))
 
 

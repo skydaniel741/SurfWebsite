@@ -50,7 +50,8 @@
 .checkout-btn-container{
     display: flex;
     justify-content: center;
-    align-items: center;}
+    align-items: center;
+    margin: 10px;}
 
 .remove-btn{
     cursor: pointer;

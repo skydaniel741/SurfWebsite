@@ -13,9 +13,9 @@
         <form action="{{ url_for('signup') }}" method="post" class="signup-content"> <!-- redicret for the sign up page -->
             <div class="signup-links">
                 <label for="username"></label>
-                <input type="text" placeholder="Username" name="username" id="username" required class="spacing"> <!--required an input -->
+                <input type="text" placeholder="Username" name="username" id="username" required class="spacing" minlength="5" maxlength="15"> <!--required an input -->
                 <label for="password"></label>
-                <input type="text" placeholder="Password" name="password" id="password" required class="spacing"> 
+                <input type="text" placeholder="Password" name="password" id="password" required class="spacing" minlength="5" maxlength="15"> 
                 <input type="submit" value="Signup" class="login-button">
             </div>
         </form> <!-- error message-->

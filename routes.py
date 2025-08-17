@@ -54,6 +54,8 @@ def execute_query(query, args=()):
     conn.close()
     return results
 
+# login page
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -279,6 +281,7 @@ def purchase_products():
     # Clear the cart after purchase
     session['cart'] = []
     flash('Thank you for your purchase!')
+    flash('logout if your done.')
     return redirect(url_for('cart'))
 
 
